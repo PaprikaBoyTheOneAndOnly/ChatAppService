@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sample</title>
+</head>
+<body>
+<main>
+
+    <button onclick="sendToJava();">to lower case</button>
+    <div id="chats"></div>
+
+    <div><input id="input" type="text"></div>
+</main>
+
+</body>
+</html>
+
+<script type="text/javascript">
+    //https://riptutorial.com/javafx/example/19313/communication-between-java-app-and-javascript-in-the-web-page
+    function sendToJava () {
+        var s = document.getElementById('input').value;
+        document.getElementById('input').innerHTML = "";
+        javaConnector.toLowerCase(s);
+
+    };
+
+    var jsConnector = {
+        addMessage: function (result)  {
+            var ta = document.getElementById('chats');
+            var p = document.createElement("pre");
+            p.innerHTML = result;
+            ta.appendChild(p);
+        }
+    };
+
+    function getJsConnector() {
+        return jsConnector;
+    };
+</script>
