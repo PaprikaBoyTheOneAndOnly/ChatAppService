@@ -1,2 +1,7 @@
 /.idea
 /target
+/.metadata
+/.recommenders
+.project
+.classpath
+/.settings
