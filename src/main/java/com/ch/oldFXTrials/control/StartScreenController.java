@@ -1,7 +1,7 @@
 package com.ch.oldFXTrials.control;
 
 import com.ch.oldFXTrials.model.Account;
-import com.ch.oldFXTrials.model.AccountManager;
+import com.ch.model.AccountManager;
 import com.ch.oldFXTrials.model.ConfirmationModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
