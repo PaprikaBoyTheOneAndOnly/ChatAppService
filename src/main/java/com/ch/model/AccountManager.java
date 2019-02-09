@@ -1,7 +1,5 @@
 package com.ch.model;
 
-import com.ch.oldFXTrials.model.Account;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 

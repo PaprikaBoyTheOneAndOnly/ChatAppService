@@ -1,6 +1,6 @@
 package com.ch.oldFXTrials.control;
 
-import com.ch.oldFXTrials.model.Account;
+import com.ch.model.Account;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.web.WebEngine;
