@@ -56,7 +56,7 @@ public class ChatController extends Controller {
          */
         public void getValue(String value) {
             if (null != value) {
-                javascriptConnector.call("addMessage", value + " - "+ account.getName());
+                javascriptConnector.call("addMessage", value + " - "+ account.getUsername());
                 System.out.println(value);
             }
         }

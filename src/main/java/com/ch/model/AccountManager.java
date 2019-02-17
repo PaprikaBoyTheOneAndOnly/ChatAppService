@@ -14,22 +14,24 @@ public class AccountManager {
     private AccountManager() {
         accounts = new ArrayList<>();
         accounts.addAll(Arrays.asList(
-                new Account("Admin"),
-                new Account("Username")
+                new Account("Admin", "Admin"),
+                new Account("Username", "")
         ));
     }
 
-    public static Account isValidName(String name){
+    public static Account isValidLogin(String name, String password) {
         Account foundAccount = null;
 
         for (Account account : accounts)
-            if (account.getName().equals(name))
+            if (account.getUsername().equals(name) && account.getPassword().equals(password)){
                 foundAccount = account;
+                foundAccount.login();
+            }
 
         return foundAccount;
     }
 
-    public void createAccount(String text) {
-        accounts.add(new Account(text));
+    public void createAccount(String name, String password) {
+        accounts.add(new Account(name, password));
     }
 }

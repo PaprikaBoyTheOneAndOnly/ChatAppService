@@ -31,8 +31,8 @@ public class AccountService {
     @POST
     @Path("/validateAccount")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response validateAccount(User user) {
-        Account foundAcc = this.manager.isValidName(user.getUsername());
+    public Response validateAccount(Account user) {
+        Account foundAcc = this.manager.isValidLogin(user.getUsername(), user.getPassword());
 
         if(foundAcc != null)
             return Response.status(200).entity(gson.toJson(foundAcc)).build();
@@ -40,28 +40,3 @@ public class AccountService {
             return Response.status(204).build();
     }
 }
-class User {
-    private String username;
-    private String password;
-
-    public User() {
-        username = "";
-        password =" ";
-    }
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-}
-
