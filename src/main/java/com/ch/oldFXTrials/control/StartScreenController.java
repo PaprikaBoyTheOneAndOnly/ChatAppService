@@ -36,7 +36,7 @@ public class StartScreenController extends Controller implements Observer {
 
     public void login(ActionEvent event) {
         if(!tfName.getText().isEmpty() || !tfName.getText().equals("")){
-            Account account = manager.isValidLogin(tfName.getText(),"");
+            Account account = manager.isValidLogin(null);
             if(account != null)
                 new ChatController(super.primaryStage, account);
             else {
@@ -52,7 +52,7 @@ public class StartScreenController extends Controller implements Observer {
     }
 
     private void createAccount(boolean answer) {
-        if(answer)
-            manager.createAccount(tfName.getText(),"");
+       // if(answer)
+            //manager.createAccount(tfName.getText(),"");
     }
 }

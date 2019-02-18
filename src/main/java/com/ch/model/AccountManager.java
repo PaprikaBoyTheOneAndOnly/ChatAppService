@@ -19,19 +19,24 @@ public class AccountManager {
         ));
     }
 
-    public static Account isValidLogin(String name, String password) {
+    public static Account isValidLogin(Account requestedAccount) {
         Account foundAccount = null;
 
         for (Account account : accounts)
-            if (account.getUsername().equals(name) && account.getPassword().equals(password)){
+            if (account.getUsername().equals(requestedAccount.getUsername())
+                    && account.getPassword().equals(requestedAccount.getPassword())){
                 foundAccount = account;
-                foundAccount.login();
             }
 
         return foundAccount;
     }
 
-    public void createAccount(String name, String password) {
-        accounts.add(new Account(name, password));
+    public static Account createNewAcc(Account newAccount) {
+        if(isValidLogin(newAccount) == null)
+            accounts.add(newAccount);
+        else
+            newAccount = null;
+
+        return newAccount;
     }
 }

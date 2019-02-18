@@ -3,7 +3,7 @@ package com.ch.model;
 public class Account {
     private String username;
     private String password;
-    private boolean logedIn;
+    private boolean loggedIn;
 
     public Account(){
         this("","");
@@ -12,7 +12,7 @@ public class Account {
     public Account(String username, String password){
         this.username = username;
         this.password = password;
-        this.logedIn = false;
+        this.loggedIn = false;
     }
 
     public String getPassword(){
@@ -24,14 +24,23 @@ public class Account {
     }
 
     public void login(){
-        this.logedIn = true;
+        this.loggedIn = true;
     }
 
     public void logout() {
-        this.logedIn = false;
+        this.loggedIn = false;
     }
 
-    public boolean isLogedIn() {
-        return logedIn;
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", loggedIn=" + loggedIn +
+                '}';
     }
 }

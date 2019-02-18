@@ -31,11 +31,25 @@ public class AccountService {
     @POST
     @Path("/validateAccount")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response validateAccount(Account user) {
-        Account foundAcc = this.manager.isValidLogin(user.getUsername(), user.getPassword());
+    public Response validateAccount(Account request) {
+        System.out.println(manager);
+        Account foundAcc = this.manager.isValidLogin(request);
 
         if(foundAcc != null)
             return Response.status(200).entity(gson.toJson(foundAcc)).build();
+        else
+            return Response.status(204).build();
+    }
+
+    @POST
+    @Path("/createNewAccount")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createNewAccount(Account newAccount) {
+        Account isValidNewAcc = this.manager.createNewAcc(newAccount);
+
+
+        if(isValidNewAcc != null)
+            return Response.status(200).entity(gson.toJson(isValidNewAcc)).build();
         else
             return Response.status(204).build();
     }
