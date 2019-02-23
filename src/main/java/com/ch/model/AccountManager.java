@@ -1,7 +1,5 @@
 package com.ch.model;
 
-import com.ch.oldFXTrials.model.Account;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -16,22 +14,29 @@ public class AccountManager {
     private AccountManager() {
         accounts = new ArrayList<>();
         accounts.addAll(Arrays.asList(
-                new Account("Admin"),
-                new Account("Username")
+                new Account("Admin", "Admin"),
+                new Account("Username", "")
         ));
     }
 
-    public static Account isValidName(String name){
+    public static Account isValidLogin(Account requestedAccount) {
         Account foundAccount = null;
 
         for (Account account : accounts)
-            if (account.getName().equals(name))
+            if (account.getUsername().equals(requestedAccount.getUsername())
+                    && account.getPassword().equals(requestedAccount.getPassword())){
                 foundAccount = account;
+            }
 
         return foundAccount;
     }
 
-    public void createAccount(String text) {
-        accounts.add(new Account(text));
+    public static Account createNewAcc(Account newAccount) {
+        if(isValidLogin(newAccount) == null)
+            accounts.add(newAccount);
+        else
+            newAccount = null;
+
+        return newAccount;
     }
 }

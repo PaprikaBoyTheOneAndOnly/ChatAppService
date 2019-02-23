@@ -1,6 +1,6 @@
 package com.ch.oldFXTrials.control;
 
-import com.ch.oldFXTrials.model.Account;
+import com.ch.model.Account;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.web.WebEngine;
@@ -56,7 +56,7 @@ public class ChatController extends Controller {
          */
         public void getValue(String value) {
             if (null != value) {
-                javascriptConnector.call("addMessage", value + " - "+ account.getName());
+                javascriptConnector.call("addMessage", value + " - "+ account.getUsername());
                 System.out.println(value);
             }
         }

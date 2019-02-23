@@ -1,23 +1,46 @@
 package com.ch.model;
 
 public class Account {
-    private String name;
-    private boolean logedIn;
+    private String username;
+    private String password;
+    private boolean loggedIn;
 
-    public Account(String name){
-        this.name = name;
-        this.logedIn = false;
+    public Account(){
+        this("","");
     }
 
-    public String getName() {
-        return name;
+    public Account(String username, String password){
+        this.username = username;
+        this.password = password;
+        this.loggedIn = false;
+    }
+
+    public String getPassword(){
+        return password;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public void login(){
-        this.logedIn = true;
+        this.loggedIn = true;
     }
 
     public void logout() {
-        this.logedIn = false;
+        this.loggedIn = false;
+    }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", loggedIn=" + loggedIn +
+                '}';
     }
 }
