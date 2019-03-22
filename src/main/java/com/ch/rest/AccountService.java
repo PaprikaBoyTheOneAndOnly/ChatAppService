@@ -54,4 +54,14 @@ public class AccountService {
         else
             return Response.status(204).build();
     }
+
+    @POST
+    @Path("/createNewAccount")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response accountReceivedMessage(Account account) {
+        if(this.manager.accountReceivedMessage(account))
+            return Response.status(200).entity(account).build();
+        else
+            return Response.status(200).entity(false).build();
+    }
 }

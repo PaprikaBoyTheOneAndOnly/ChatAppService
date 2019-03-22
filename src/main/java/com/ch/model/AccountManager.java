@@ -38,4 +38,8 @@ public class AccountManager {
 
         return newAccount;
     }
+
+    public static boolean accountReceivedMessage(Account account) {
+        return false;
+    }
 }
