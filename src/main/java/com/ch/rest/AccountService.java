@@ -47,7 +47,6 @@ public class AccountService {
     public Response createNewAccount(Account newAccount) {
         Account isValidNewAcc = this.manager.createNewAcc(newAccount);
 
-
         if(isValidNewAcc != null)
             return Response.status(200).entity(gson.toJson(isValidNewAcc)).build();
         else
