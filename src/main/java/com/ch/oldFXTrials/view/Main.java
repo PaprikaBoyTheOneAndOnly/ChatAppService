@@ -4,6 +4,8 @@ import com.ch.oldFXTrials.control.StartScreenController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+import java.util.HashMap;
+
 public class Main extends Application {
     public static void main(String[] args) {
         launch(args);

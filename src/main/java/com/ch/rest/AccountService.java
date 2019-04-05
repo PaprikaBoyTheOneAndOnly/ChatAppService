@@ -32,11 +32,12 @@ public class AccountService {
     @Path("/validateAccount")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response validateAccount(Account request) {
-        System.out.println(manager);
         Account foundAcc = this.manager.isValidLogin(request);
 
-        if(foundAcc != null)
+        if(foundAcc != null) {
+            foundAcc.login();
             return Response.status(200).entity(gson.toJson(foundAcc)).build();
+        }
         else
             return Response.status(204).build();
     }
@@ -51,5 +52,15 @@ public class AccountService {
             return Response.status(200).entity(gson.toJson(isValidNewAcc)).build();
         else
             return Response.status(204).build();
+    }
+
+    @POST
+    @Path("/createNewAccount")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response accountReceivedMessage(Account account) {
+        if(this.manager.accountReceivedMessage(account))
+            return Response.status(200).entity(account).build();
+        else
+            return Response.status(200).entity(false).build();
     }
 }
