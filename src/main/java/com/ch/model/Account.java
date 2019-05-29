@@ -35,12 +35,4 @@ public class Account {
         return loggedIn;
     }
 
-    @Override
-    public String toString() {
-        return "Account{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", loggedIn=" + loggedIn +
-                '}';
-    }
 }
