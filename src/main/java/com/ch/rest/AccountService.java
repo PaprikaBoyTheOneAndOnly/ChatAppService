@@ -3,6 +3,15 @@ package com.ch.rest;
 import com.ch.model.Account;
 import com.ch.model.AccountManager;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.google.gson.annotations.SerializedName;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -10,8 +19,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.time.LocalDateTime;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,10 +27,14 @@ import java.util.List;
 @Path("/")
 public class AccountService {
     private Gson gson;
+
     private AccountManager manager;
 
     public AccountService() {
-        gson = new Gson();
+        GsonBuilder gb = new GsonBuilder();
+        gb.registerTypeAdapter(CHAT_STATUS.class, new ChatStatusTypeDeserializer());
+        gb.registerTypeAdapter(CHAT_STATUS.class, new ChatStatusTypeSerializer());
+        gson = gb.create();
         manager = AccountManager.getInstance();
     }
 
@@ -36,13 +48,13 @@ public class AccountService {
     @Path("/validateAccount")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response validateAccount(Account request) {
+        System.out.println(request);
         Account foundAcc = this.manager.isValidLogin(request);
 
-        if(foundAcc != null) {
+        if (foundAcc != null) {
             foundAcc.login();
             return Response.status(200).entity(gson.toJson(foundAcc)).build();
-        }
-        else
+        } else
             return Response.status(204).build();
     }
 
@@ -50,9 +62,10 @@ public class AccountService {
     @Path("/createNewAccount")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createNewAccount(Account newAccount) {
+        System.out.println(newAccount);
         Account isValidNewAcc = this.manager.createNewAcc(newAccount);
 
-        if(isValidNewAcc != null)
+        if (isValidNewAcc != null)
             return Response.status(200).entity(gson.toJson(isValidNewAcc)).build();
         else
             return Response.status(204).build();
@@ -62,7 +75,7 @@ public class AccountService {
     @Path("/createNewAccount")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response accountReceivedMessage(Account account) {
-        if(this.manager.accountReceivedMessage(account))
+        if (this.manager.accountReceivedMessage(account))
             return Response.status(200).entity(account).build();
         else
             return Response.status(200).entity(false).build();
@@ -72,117 +85,86 @@ public class AccountService {
     @Path("/getChatFromAccount")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getChatFromAccount(Account account) {
-        System.out.println("Im here");
         Chat chat = new Chat();
-        List<Message> listSender = new ArrayList<>();
-        List<Message> listReceiver = new ArrayList<>();
 
-        listSender.add(new Message(LocalDateTime.now(), "Hello"));
-        listReceiver.add(new Message(LocalDateTime.now(), "hi, how are you?"));
-        listSender.add(new Message(LocalDateTime.now(), "Im fine, hbu?"));
-        listReceiver.add(new Message(LocalDateTime.now(), "Me too"));
+        chat.setMessages(Arrays.asList(
+                new Message("Hi", CHAT_STATUS.SENT),
+                new Message("Hi, how are you?", CHAT_STATUS.RECEIVED),
+                new Message("Im fine, hbu?", CHAT_STATUS.SENT),
+                new Message("me 2", CHAT_STATUS.RECEIVED),
+                new Message("stfu", CHAT_STATUS.RECEIVED)
+        ));
 
-        chat.setReceiver(new Receiver(listReceiver));
-        chat.setSender(new Sender(listSender));
-        System.out.println(chat);
-
-        return Response.status(200).entity(gson.toJson(chat)).build();
+        return Response.status(200).entity(gson.toJson(Arrays.asList(chat))).build();
     }
 
-    class Chat {
-        private Receiver receiver;
-        private Sender sender;
-        Chat() {}
-
-        public Chat(Receiver receiver, Sender sender) {
-            this.receiver = receiver;
-            this.sender = sender;
-        }
-
-        public Receiver getReceiver() {
-            return receiver;
-        }
-
-        public void setReceiver(Receiver receiver) {
-            this.receiver = receiver;
-        }
-
-        public Sender getSender() {
-            return sender;
-        }
-
-        public void setSender(Sender sender) {
-            this.sender = sender;
-        }
-
-
-
-
-
-    }
-    class Receiver {
+    private class Chat {
         private List<Message> messages;
 
-        Receiver() {
-
-        }
-        Receiver(List<Message> messages) {
-            this.messages = messages;
+        Chat() {
+            this.messages = new ArrayList<>();
         }
 
         public List<Message> getMessages() {
             return messages;
         }
 
-        public void setMessages(List<Message> messages) {
+        void setMessages(List<Message> messages) {
             this.messages = messages;
         }
     }
-    class Sender {
 
-        private List<Message> messages;
+    private class Message {
+        private String text;
+        private CHAT_STATUS status;
 
-        Sender() {
-
-        }
-        Sender(List<Message> messages) {
-            this.messages = messages;
+        public Message() {
         }
 
-        public List<Message> getMessages() {
-            return messages;
-        }
-
-        public void setMessages(List<Message> messages) {
-            this.messages = messages;
+        public Message(String text, CHAT_STATUS status) {
+            this.text = text;
+            this.status = status;
         }
     }
-    class Message {
-        private LocalDateTime timestamp;
-        private String message;
 
-        Message() {
+    private enum CHAT_STATUS {
+        RECEIVED(1), SENT(0);
 
-        }
-        Message(LocalDateTime timestamp, String message) {
-            this.timestamp = timestamp;
-            this.message = message;
+        private int status;
+
+        CHAT_STATUS(int status) {
+            this.status = status;
         }
 
-        public LocalDateTime getTimestamp() {
-            return timestamp;
+        public static CHAT_STATUS getEnumType(int typeInt) {
+            switch (typeInt) {
+                case 1:
+                    return RECEIVED;
+                case 0:
+                    return SENT;
+                default:
+                    return null;
+            }
         }
 
-        public void setTimestamp(LocalDateTime timestamp) {
-            this.timestamp = timestamp;
+        public int getValue() {
+            return this.status;
         }
+    }
 
-        public String getMessage() {
-            return message;
+    private static class ChatStatusTypeDeserializer implements JsonDeserializer<CHAT_STATUS> {
+        @Override
+        public CHAT_STATUS deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext ctx) throws JsonParseException {
+            int typeInt = json.getAsInt();
+            return CHAT_STATUS.getEnumType(typeInt);
         }
+    }
 
-        public void setMessage(String message) {
-            this.message = message;
+    private static class ChatStatusTypeSerializer implements JsonSerializer<CHAT_STATUS> {
+
+        @Override
+        public JsonElement serialize(CHAT_STATUS chat_status, Type type, JsonSerializationContext jsonSerializationContext) {
+            return new JsonPrimitive(chat_status.getValue());
         }
     }
 }
