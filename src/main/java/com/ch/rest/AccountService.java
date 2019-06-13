@@ -11,7 +11,6 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.google.gson.annotations.SerializedName;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
