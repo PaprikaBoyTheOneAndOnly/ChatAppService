@@ -1,17 +1,13 @@
 package com.ch.model;
 
+import javax.inject.Named;
 import java.util.HashMap;
 
-
+@Named
 public class AccountManager {
-    private static final AccountManager INSTANCE = new AccountManager();
     private HashMap<String, Account> accounts;
 
-    public static AccountManager getInstance() {
-        return INSTANCE;
-    }
-
-    private AccountManager() {
+    public AccountManager() {
         accounts = new HashMap<>();
         accounts.put("Admin", new Account("Admin", "Admin"));
         accounts.put("Username", new Account("Username", ""));
@@ -36,9 +32,5 @@ public class AccountManager {
         }
 
         return newAccount;
-    }
-
-    public boolean accountReceivedMessage(Account account) {
-        return false;
     }
 }
