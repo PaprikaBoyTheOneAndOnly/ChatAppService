@@ -40,7 +40,6 @@ public class Account {
         return "Account{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", loggedIn=" + loggedIn +
                 '}';
     }
 }

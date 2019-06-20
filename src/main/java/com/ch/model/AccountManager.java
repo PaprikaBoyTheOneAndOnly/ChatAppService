@@ -1,41 +1,35 @@
 package com.ch.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import javax.inject.Named;
+import java.util.HashMap;
 
+@Named
 public class AccountManager {
-    private static AccountManager INSTANCE = new AccountManager();
-    private static ArrayList<Account> accounts;
+    private HashMap<String, Account> accounts;
 
-    public static AccountManager getInstance() {
-        return INSTANCE;
+    public AccountManager() {
+        accounts = new HashMap<>();
+        accounts.put("Admin", new Account("Admin", "Admin"));
+        accounts.put("Username", new Account("Username", ""));
     }
 
-    private AccountManager() {
-        accounts = new ArrayList<>();
-        accounts.addAll(Arrays.asList(
-                new Account("Admin", "Admin"),
-                new Account("Username", "")
-        ));
-    }
+    public Account isValidLogin(Account requestedAccount) {
+        Account foundAccount = accounts.get(requestedAccount.getUsername());
 
-    public static Account isValidLogin(Account requestedAccount) {
-        Account foundAccount = null;
-
-        for (Account account : accounts)
-            if (account.getUsername().equals(requestedAccount.getUsername())
-                    && account.getPassword().equals(requestedAccount.getPassword())){
-                foundAccount = account;
-            }
+        if (foundAccount != null)
+            if (!foundAccount.getPassword().equals(requestedAccount.getPassword()))
+                foundAccount = null;
 
         return foundAccount;
     }
 
-    public static Account createNewAcc(Account newAccount) {
-        if(isValidLogin(newAccount) == null)
-            accounts.add(newAccount);
-        else
-            newAccount = null;
+    public Account createNewAcc(Account newAccount) {
+        if (accounts.get(newAccount.getUsername()) != null)
+            return null;
+        else {
+            accounts.put(newAccount.getUsername(), newAccount);
+            newAccount.login();
+        }
 
         return newAccount;
     }
