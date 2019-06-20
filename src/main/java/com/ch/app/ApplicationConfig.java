@@ -18,7 +18,7 @@ import java.util.UUID;
 public class ApplicationConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/login");
+        config.enableSimpleBroker("/setLogin", "/validateInput", "/user");
         config.setApplicationDestinationPrefixes("/chat-app");
     }
 
@@ -27,6 +27,7 @@ public class ApplicationConfig implements WebSocketMessageBrokerConfigurer {
         stompEndpointRegistry
                 .addEndpoint("/my-chat-app")
                 .setHandshakeHandler(new CustomHandshakeHandler())
+                .setAllowedOrigins("*")
                 .withSockJS();
     }
 
