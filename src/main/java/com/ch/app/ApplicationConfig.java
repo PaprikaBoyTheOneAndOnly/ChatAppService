@@ -25,7 +25,7 @@ public class ApplicationConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
         stompEndpointRegistry
-                .addEndpoint("/myChat-app")
+                .addEndpoint("/my-chat-app")
                 .setHandshakeHandler(new CustomHandshakeHandler())
                 .withSockJS();
     }
