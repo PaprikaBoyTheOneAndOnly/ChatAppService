@@ -1,4 +1,4 @@
-package com.ch.app;
+package com.me.ch;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpRequest;
@@ -13,13 +13,14 @@ import java.security.Principal;
 import java.util.Map;
 import java.util.UUID;
 
+
 @Configuration
 @EnableWebSocketMessageBroker
 public class ApplicationConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/login");
-        config.setApplicationDestinationPrefixes("/chat-app");
+        config.enableSimpleBroker("/login", "/chat");
+        config.setApplicationDestinationPrefixes("/chatApp");
     }
 
     @Override
@@ -27,6 +28,7 @@ public class ApplicationConfig implements WebSocketMessageBrokerConfigurer {
         stompEndpointRegistry
                 .addEndpoint("/my-chat-app")
                 .setHandshakeHandler(new CustomHandshakeHandler())
+                .setAllowedOrigins("*")
                 .withSockJS();
     }
 
@@ -35,20 +37,22 @@ public class ApplicationConfig implements WebSocketMessageBrokerConfigurer {
         protected Principal determineUser(ServerHttpRequest request,
                                           WebSocketHandler wsHandler,
                                           Map<String, Object> attributes) {
+
             return new StompPrincipal(UUID.randomUUID().toString());
         }
+    }
 
-        class StompPrincipal implements Principal {
-            String name;
+    class StompPrincipal implements Principal {
+        String name;
 
-            StompPrincipal(String name) {
-                this.name = name;
-            }
+        StompPrincipal(String name) {
+            this.name = name;
+        }
 
-            @Override
-            public String getName() {
-                return name;
-            }
+        @Override
+        public String getName() {
+            return name;
         }
     }
 }
+
