@@ -12,18 +12,18 @@ public class Account {
     // key = username of other account
     private HashMap<String, List<Message>> chats;
 
-    public Account(){
-        this("","");
+    public Account() {
+        this("", "");
     }
 
-    public Account(String username, String password){
+    public Account(String username, String password) {
         this.username = username;
         this.password = password;
         this.UUID = "";
         this.chats = new HashMap<>();
     }
 
-    public String getPassword(){
+    public String getPassword() {
         return password;
     }
 
@@ -40,12 +40,12 @@ public class Account {
     }
 
     public void addMessage(Message message) {
-        String chattedUser = message.getFrom() == this.username? message.getTo(): message.getFrom();
+        String chatToAdd = this.getUsername().equals(message.getTo()) ? message.getFrom() : message.getTo();
 
-        if(this.chats.get(chattedUser) == null){
-            this.chats.put(chattedUser, new ArrayList<>());
-        }
-        this.chats.get(chattedUser).add(message);
+        if (this.chats.get(chatToAdd) == null)
+            this.chats.put(chatToAdd, new ArrayList<>());
+
+        this.chats.get(chatToAdd).add(message);
     }
 
     @Override
@@ -54,5 +54,9 @@ public class Account {
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    public HashMap<String, List<Message>> getChats() {
+        return this.chats;
     }
 }

@@ -35,20 +35,21 @@ public class ChatService {
     public void receiveMessage(SimpMessageHeaderAccessor sha, Message message) {
         try {
             this.manager.addMessageToAccounts(message);
-            this.template.convertAndSendToUser(this.manager.getUUIDFromUsername(message.getTo()), "/chat/receiveChat", message);
-            this.template.convertAndSendToUser(sha.getUser().getName(), "/chat/receiveChat", message);
+            this.template.convertAndSendToUser(this.manager.getUUIDFromUsername(message.getTo()), "/chat/receiveMessage", message);
+            this.template.convertAndSendToUser(sha.getUser().getName(), "/chat/receiveMessage", message);
         } catch (NullPointerException e) {
             this.template.convertAndSendToUser(sha.getUser().getName(),
-                    "/chat/receiveChat",
+                    "/chat/receiveMessage",
                     new RequestFailed(FORBIDDEN, "User " + message.getTo() + " does not exist!"));
         }
 
     }
 
-    /*@MessageMapping("/getMessages")
-    public void sendMessages(Account account) {
-        this.template.convertAndSendToUser(this.manager.getUUIDFromUsername(account.getUsername()),
-                "/chat/receiveChat",
-                this.manager.getChatFromAccount(account));
-    }*/
+    @MessageMapping("/getMessages")
+    public void sendMessages(SimpMessageHeaderAccessor sha, Account account) {
+        System.out.println(account +" <---");
+        this.template.convertAndSendToUser(sha.getUser().getName(),
+                "/chat/receiveChats",
+                this.manager.getChatsFromAccount(account));
+    }
 }

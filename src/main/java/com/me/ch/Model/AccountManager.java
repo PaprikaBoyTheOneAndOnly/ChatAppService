@@ -3,6 +3,7 @@ package com.me.ch.Model;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Named
@@ -45,5 +46,9 @@ public class AccountManager {
 
     public void setUUIDForAccount(Account account, String uuid) {
         this.accounts.get(account.getUsername()).setUUID(uuid);
+    }
+
+    public HashMap<String ,List<Message>> getChatsFromAccount(Account account) {
+        return this.accounts.get(account.getUsername()).getChats();
     }
 }
