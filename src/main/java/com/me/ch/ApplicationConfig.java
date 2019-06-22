@@ -3,7 +3,6 @@ package com.me.ch;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -20,7 +19,7 @@ import java.util.UUID;
 public class ApplicationConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/login");
+        config.enableSimpleBroker("/login", "/chat");
         config.setApplicationDestinationPrefixes("/chatApp");
     }
 
@@ -38,20 +37,22 @@ public class ApplicationConfig implements WebSocketMessageBrokerConfigurer {
         protected Principal determineUser(ServerHttpRequest request,
                                           WebSocketHandler wsHandler,
                                           Map<String, Object> attributes) {
+
             return new StompPrincipal(UUID.randomUUID().toString());
         }
+    }
 
-        class StompPrincipal implements Principal {
-            String name;
+    class StompPrincipal implements Principal {
+        String name;
 
-            StompPrincipal(String name) {
-                this.name = name;
-            }
+        StompPrincipal(String name) {
+            this.name = name;
+        }
 
-            @Override
-            public String getName() {
-                return name;
-            }
+        @Override
+        public String getName() {
+            return name;
         }
     }
 }
+
