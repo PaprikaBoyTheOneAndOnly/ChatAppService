@@ -47,7 +47,6 @@ public class ChatService {
 
     @MessageMapping("/getMessages")
     public void sendMessages(SimpMessageHeaderAccessor sha, Account account) {
-        System.out.println(account +" <---");
         this.template.convertAndSendToUser(sha.getUser().getName(),
                 "/chat/receiveChats",
                 this.manager.getChatsFromAccount(account));

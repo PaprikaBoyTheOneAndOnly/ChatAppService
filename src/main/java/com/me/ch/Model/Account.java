@@ -57,6 +57,9 @@ public class Account {
     }
 
     public HashMap<String, List<Message>> getChats() {
+        if(this.chats == null) {
+            this.chats = new HashMap<>();
+        }
         return this.chats;
     }
 }

@@ -27,8 +27,7 @@ public class LoginService {
     @MessageMapping("/validate")
     public void validate(SimpMessageHeaderAccessor sha, Account account) {
         Account foundAccount = this.manager.isValidLogin(account, sha.getUser().getName());
-        System.out.println(account.getUsername() +": ");
-        System.out.println(sha.getUser().getName());
+
         if (foundAccount != null)
             template.convertAndSendToUser(sha.getUser().getName(), "login/setLogin", foundAccount);
         else
