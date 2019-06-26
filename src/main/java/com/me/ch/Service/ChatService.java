@@ -25,17 +25,11 @@ public class ChatService {
     public ChatService() {
     }
 
-
-    @MessageMapping("/connect")
-    public void connect(SimpMessageHeaderAccessor sha, Account account) {
-        this.manager.setUUIDForAccount(account, sha.getUser().getName());
-    }
-
     @MessageMapping("/sendMessage")
     public void receiveMessage(SimpMessageHeaderAccessor sha, Message message) {
         try {
             this.manager.addMessageToAccounts(message);
-            this.template.convertAndSendToUser(this.manager.getUUIDFromUsername(message.getTo()), "/chat/receiveMessage", message);
+            this.template.convertAndSendToUser(message.getTo(), "/chat/receiveMessage", message);
             this.template.convertAndSendToUser(sha.getUser().getName(), "/chat/receiveMessage", message);
         } catch (NullPointerException e) {
             this.template.convertAndSendToUser(sha.getUser().getName(),

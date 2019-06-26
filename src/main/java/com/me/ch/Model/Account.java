@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Account {
-    private String UUID;
     private String username;
     private String password;
 
@@ -19,7 +18,6 @@ public class Account {
     public Account(String username, String password) {
         this.username = username;
         this.password = password;
-        this.UUID = "";
         this.chats = new HashMap<>();
     }
 
@@ -29,14 +27,6 @@ public class Account {
 
     public String getUsername() {
         return username;
-    }
-
-    public String getUUID() {
-        return UUID;
-    }
-
-    public void setUUID(String UUID) {
-        this.UUID = UUID;
     }
 
     public void addMessage(Message message) {

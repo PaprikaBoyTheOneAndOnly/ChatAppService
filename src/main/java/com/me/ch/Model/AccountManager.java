@@ -17,7 +17,7 @@ public class AccountManager {
         this.accounts.put("Username", new Account("Username", "1234"));
     }
 
-    public Account isValidLogin(Account account, String UUID) {
+    public Account isValidLogin(Account account) {
         Account foundAccount = this.accounts.get(account.getUsername());
 
         if (foundAccount != null)
@@ -25,10 +25,6 @@ public class AccountManager {
                 return null;
 
         return foundAccount;
-    }
-
-    public String getUUIDFromUsername(String username) {
-       return this.accounts.get(username).getUUID();
     }
 
     public Account createAccount(Account account) {
@@ -42,10 +38,6 @@ public class AccountManager {
     public void addMessageToAccounts(Message message) throws NullPointerException {
         this.accounts.get(message.getTo()).addMessage(message);
         this.accounts.get(message.getFrom()).addMessage(message);
-    }
-
-    public void setUUIDForAccount(Account account, String uuid) {
-        this.accounts.get(account.getUsername()).setUUID(uuid);
     }
 
     public HashMap<String ,List<Message>> getChatsFromAccount(Account account) {

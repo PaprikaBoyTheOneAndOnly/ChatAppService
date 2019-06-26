@@ -37,22 +37,28 @@ public class ApplicationConfig implements WebSocketMessageBrokerConfigurer {
         protected Principal determineUser(ServerHttpRequest request,
                                           WebSocketHandler wsHandler,
                                           Map<String, Object> attributes) {
-
-            return new StompPrincipal(UUID.randomUUID().toString());
-        }
-    }
-
-    class StompPrincipal implements Principal {
-        String name;
-
-        StompPrincipal(String name) {
-            this.name = name;
+            return new StompPrincipal(this.getUsername(request.getURI().toString()));
         }
 
-        @Override
-        public String getName() {
-            return name;
+        private String getUsername(String URI) {
+
+            if (URI.contains("username"))
+                return URI.substring(URI.indexOf("username") + 9);
+
+            return UUID.randomUUID().toString();
+        }
+
+        class StompPrincipal implements Principal {
+            String name;
+
+            StompPrincipal(String name) {
+                this.name = name;
+            }
+
+            @Override
+            public String getName() {
+                return name;
+            }
         }
     }
 }
-
