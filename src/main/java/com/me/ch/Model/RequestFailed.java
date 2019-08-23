@@ -29,7 +29,8 @@ public class RequestFailed {
     }
 
     public enum RequestCode {
-        FORBIDDEN(403);
+        FORBIDDEN(403),
+        NOT_FOUND(404);
 
         private int value;
 

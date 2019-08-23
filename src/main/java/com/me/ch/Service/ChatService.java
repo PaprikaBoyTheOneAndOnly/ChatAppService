@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import javax.inject.Inject;
 
 import static com.me.ch.Model.RequestFailed.RequestCode.FORBIDDEN;
+import static com.me.ch.Model.RequestFailed.RequestCode.NOT_FOUND;
 
 @Controller
 public class ChatService {
@@ -44,5 +45,15 @@ public class ChatService {
         this.template.convertAndSendToUser(sha.getUser().getName(),
                 "/chat/receiveChats",
                 this.manager.getChatsFromAccount(account));
+    }
+
+    @MessageMapping("/isExistingAccount")
+    public void isExistingAccount(SimpMessageHeaderAccessor sha, String username) {
+        if (this.manager.isExistingAccount(username)) {
+            this.template.convertAndSendToUser(sha.getUser().getName(), "chat/isExistingAccount", username);
+        } else {
+            this.template.convertAndSendToUser(sha.getUser().getName(), "chat/isExistingAccount",
+                    new RequestFailed(NOT_FOUND, "Could not find \"" + username+"\""));
+        }
     }
 }

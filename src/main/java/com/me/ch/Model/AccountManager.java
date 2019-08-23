@@ -43,4 +43,8 @@ public class AccountManager {
     public HashMap<String ,List<Message>> getChatsFromAccount(Account account) {
         return this.accounts.get(account.getUsername()).getChats();
     }
+
+    public boolean isExistingAccount(String username) {
+        return this.accounts.containsKey(username);
+    }
 }

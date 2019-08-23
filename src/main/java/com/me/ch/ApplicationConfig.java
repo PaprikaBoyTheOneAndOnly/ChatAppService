@@ -42,8 +42,9 @@ public class ApplicationConfig implements WebSocketMessageBrokerConfigurer {
 
         private String getUsername(String URI) {
 
-            if (URI.contains("username"))
-                return URI.substring(URI.indexOf("username") + 9);
+            if (URI.contains("username")) {
+                return URI.substring(URI.indexOf("username=") + 9);
+            }
 
             return UUID.randomUUID().toString();
         }
