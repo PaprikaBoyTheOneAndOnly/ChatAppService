@@ -1,6 +1,7 @@
 package com.me.ch.Model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,8 +9,7 @@ public class Account {
     private String username;
     private String password;
 
-    // key = username of other account
-    private HashMap<String, List<Message>> chats;
+    private List<Chat> chats;
 
     public Account() {
         this("", "");
@@ -18,7 +18,7 @@ public class Account {
     public Account(String username, String password) {
         this.username = username;
         this.password = password;
-        this.chats = new HashMap<>();
+        this.chats = new ArrayList<>();
     }
 
     public String getPassword() {
@@ -30,12 +30,20 @@ public class Account {
     }
 
     public void addMessage(Message message) {
-        String chatToAdd = this.getUsername().equals(message.getTo()) ? message.getFrom() : message.getTo();
-
-        if (this.chats.get(chatToAdd) == null)
-            this.chats.put(chatToAdd, new ArrayList<>());
-
-        this.chats.get(chatToAdd).add(message);
+        // was received / sent
+        String chatWith = this.getUsername().equals(message.getTo()) ? message.getFrom() : message.getTo();
+        System.out.println(message);
+        System.out.println(this.username);
+        boolean isExistingChat = false;
+        for(Chat chat: this.chats) {
+            if(chat.getChatWith().equals(chatWith)) {
+                chat.addMessage(message);
+                isExistingChat = true;
+            }
+        }
+        if(!isExistingChat) {
+            this.chats.add(new Chat(chatWith, Arrays.asList(message)));
+        }
     }
 
     @Override
@@ -46,9 +54,9 @@ public class Account {
                 '}';
     }
 
-    public HashMap<String, List<Message>> getChats() {
+    public List<Chat> getChats() {
         if(this.chats == null) {
-            this.chats = new HashMap<>();
+            this.chats = new ArrayList<>();
         }
         return this.chats;
     }

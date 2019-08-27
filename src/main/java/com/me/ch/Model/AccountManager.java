@@ -40,7 +40,7 @@ public class AccountManager {
         this.accounts.get(message.getFrom()).addMessage(message);
     }
 
-    public HashMap<String ,List<Message>> getChatsFromAccount(Account account) {
+    public List<Chat> getChatsFromAccount(Account account) {
         return this.accounts.get(account.getUsername()).getChats();
     }
 

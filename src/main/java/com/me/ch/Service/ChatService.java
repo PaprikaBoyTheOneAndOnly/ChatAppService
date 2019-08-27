@@ -37,7 +37,6 @@ public class ChatService {
                     "/chat/receiveMessage",
                     new RequestFailed(FORBIDDEN, "User " + message.getTo() + " does not exist!"));
         }
-
     }
 
     @MessageMapping("/getMessages")
