@@ -2,7 +2,6 @@ package com.me.ch.Model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class Account {
@@ -30,18 +29,19 @@ public class Account {
     }
 
     public void addMessage(Message message) {
-        // was received / sent
+        if(this.chats == null) {
+            this.chats = new ArrayList<>();
+        }
+
         String chatWith = this.getUsername().equals(message.getTo()) ? message.getFrom() : message.getTo();
-        System.out.println(message);
-        System.out.println(this.username);
         boolean isExistingChat = false;
-        for(Chat chat: this.chats) {
-            if(chat.getChatWith().equals(chatWith)) {
+        for (Chat chat : this.chats) {
+            if (chat.getChatWith().equals(chatWith)) {
                 chat.addMessage(message);
                 isExistingChat = true;
             }
         }
-        if(!isExistingChat) {
+        if (!isExistingChat) {
             this.chats.add(new Chat(chatWith, Arrays.asList(message)));
         }
     }
@@ -55,7 +55,7 @@ public class Account {
     }
 
     public List<Chat> getChats() {
-        if(this.chats == null) {
+        if (this.chats == null) {
             this.chats = new ArrayList<>();
         }
         return this.chats;

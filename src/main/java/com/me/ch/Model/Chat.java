@@ -36,8 +36,9 @@ public class Chat {
     }
 
     public void addMessage(Message message) {
-        System.out.println(message);
-        System.out.println(this.messages);
+        if(this.messages== null) {
+            this.messages = new ArrayList<>();
+        }
         this.messages.add(message);
     }
 }
