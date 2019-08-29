@@ -1,14 +1,11 @@
 package com.me.ch.Model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class Account {
     private String username;
     private String password;
 
-    private List<Chat> chats;
+    private ArrayList<Chat> chats;
 
     public Account() {
         this("", "");
@@ -42,7 +39,9 @@ public class Account {
             }
         }
         if (!isExistingChat) {
-            this.chats.add(new Chat(chatWith, Arrays.asList(message)));
+            ArrayList<Message> messages = new ArrayList<>();
+            messages.add(message);
+            this.chats.add(new Chat(chatWith, messages));
         }
     }
 
@@ -54,7 +53,7 @@ public class Account {
                 '}';
     }
 
-    public List<Chat> getChats() {
+    public ArrayList<Chat> getChats() {
         if (this.chats == null) {
             this.chats = new ArrayList<>();
         }

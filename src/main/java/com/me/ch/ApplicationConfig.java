@@ -1,5 +1,6 @@
 package com.me.ch;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 @Configuration
 @EnableWebSocketMessageBroker
+@ComponentScan("com.me.ch")
 public class ApplicationConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {

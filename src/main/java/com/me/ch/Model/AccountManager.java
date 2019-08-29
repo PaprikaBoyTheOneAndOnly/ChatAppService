@@ -1,13 +1,14 @@
 package com.me.ch.Model;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.ApplicationScope;
+
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-@Named
-@Singleton
+@Component("accountManager")
+@ApplicationScope
 public class AccountManager {
     private Map<String, Account> accounts;
 
@@ -40,8 +41,8 @@ public class AccountManager {
         this.accounts.get(message.getFrom()).addMessage(message);
     }
 
-    public List<Chat> getChatsFromAccount(Account account) {
-        return this.accounts.get(account.getUsername()).getChats();
+    public ArrayList<Chat> getChatsFromAccount(String username) {
+        return this.accounts.get(username).getChats();
     }
 
     public boolean isExistingAccount(String username) {
