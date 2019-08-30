@@ -13,6 +13,11 @@ public class Chat {
 
     public Chat() { }
 
+    public Chat(String chatWith) {
+        this.chatWith = chatWith;
+        this.messages = new ArrayList<>();
+    }
+
     public Chat(String chatWith, ArrayList<Message> messages) {
         this.chatWith = chatWith;
         this.messages = messages;
