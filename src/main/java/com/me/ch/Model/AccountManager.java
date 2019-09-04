@@ -1,5 +1,7 @@
 package com.me.ch.Model;
 
+import com.me.ch.Model.dao.AccountDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.ApplicationScope;
 
@@ -12,10 +14,12 @@ import java.util.Map;
 public class AccountManager {
     private Map<String, Account> accounts;
 
+    @Autowired
+    private AccountDao accountDao;
+
     public AccountManager() {
         this.accounts = new HashMap<>();
-        this.accounts.put("Admin", new Account("Admin", "Admin"));
-        this.accounts.put("Username", new Account("Username", "1234"));
+        this.accountDao.getAll().forEach(account -> this.accounts.put(account.getUsername(), account));
     }
 
     public Account isValidLogin(Account account) {
@@ -47,5 +51,9 @@ public class AccountManager {
 
     public boolean isExistingAccount(String username) {
         return this.accounts.containsKey(username);
+    }
+
+    public AccountDao getdao() {
+            return this.accountDao;
     }
 }

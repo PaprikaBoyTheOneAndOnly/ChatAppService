@@ -1,6 +1,7 @@
 package com.me.ch.Model;
 
 import java.util.ArrayList;
+
 public class Account {
     private String username;
     private String password;
@@ -26,7 +27,7 @@ public class Account {
     }
 
     public void addMessage(Message message) {
-        if(this.chats == null) {
+        if (this.chats == null) {
             this.chats = new ArrayList<>();
         }
 
