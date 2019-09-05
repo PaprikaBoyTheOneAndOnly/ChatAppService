@@ -1,11 +1,9 @@
-package com.me.ch.app;
+package com.me.ch;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan("com.me.ch")
 public class AppInitializer {
 
     public static void main(String[] args) {

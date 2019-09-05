@@ -1,8 +1,8 @@
 package com.me.ch.Service;
 
-import com.me.ch.Model.Account;
-import com.me.ch.Model.AccountManager;
-import com.me.ch.Model.Chat;
+import com.me.ch.model.Account;
+import com.me.ch.model.AccountManager;
+import com.me.ch.model.Chat;
 import com.me.ch.Service.errors.AccountNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;

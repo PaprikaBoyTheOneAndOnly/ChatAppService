@@ -1,7 +1,7 @@
 package com.me.ch.Service;
 
-import com.me.ch.Model.AccountManager;
-import com.me.ch.Model.Message;
+import com.me.ch.model.AccountManager;
+import com.me.ch.model.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

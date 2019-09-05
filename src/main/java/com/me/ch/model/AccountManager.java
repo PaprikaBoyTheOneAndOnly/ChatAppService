@@ -1,25 +1,28 @@
-package com.me.ch.Model;
+package com.me.ch.model;
 
-import com.me.ch.Model.dao.AccountDao;
+import com.me.ch.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.ApplicationScope;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component("accountManager")
 @ApplicationScope
+@Service("accountManager")
 public class AccountManager {
-    private Map<String, Account> accounts;
-
     @Autowired
-    private AccountDao accountDao;
+    private AccountRepository accountRepository;
+
+    private Map<String, Account> accounts;
 
     public AccountManager() {
         this.accounts = new HashMap<>();
-        this.accountDao.getAll().forEach(account -> this.accounts.put(account.getUsername(), account));
+    }
+
+    public void setAccounts(Map<String, Account> accounts) {
+        this.accounts = accounts;
     }
 
     public Account isValidLogin(Account account) {
@@ -36,7 +39,8 @@ public class AccountManager {
         if (this.accounts.get(account.getUsername()) == null) {
             this.accounts.put(account.getUsername(), account);
             return account;
-        } else
+        }
+
             return null;
     }
 
@@ -51,9 +55,5 @@ public class AccountManager {
 
     public boolean isExistingAccount(String username) {
         return this.accounts.containsKey(username);
-    }
-
-    public AccountDao getdao() {
-            return this.accountDao;
     }
 }

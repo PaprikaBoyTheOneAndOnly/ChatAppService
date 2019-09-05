@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RestController
 public class TestService {
+
     @GetMapping("/test")
     public String testRequest() {
         return "Server works fine!";

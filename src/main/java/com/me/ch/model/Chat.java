@@ -1,4 +1,4 @@
-package com.me.ch.Model;
+package com.me.ch.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

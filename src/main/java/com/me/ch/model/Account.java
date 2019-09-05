@@ -1,4 +1,4 @@
-package com.me.ch.Model;
+package com.me.ch.model;
 
 import java.util.ArrayList;
 
