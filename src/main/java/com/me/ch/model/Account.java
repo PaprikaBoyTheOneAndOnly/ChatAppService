@@ -46,6 +46,13 @@ public class Account {
         }
     }
 
+    public ArrayList<Chat> getChats() {
+        if (this.chats == null) {
+            this.chats = new ArrayList<>();
+        }
+        return this.chats;
+    }
+
     @Override
     public String toString() {
         return "Account{" +
@@ -54,10 +61,21 @@ public class Account {
                 '}';
     }
 
-    public ArrayList<Chat> getChats() {
-        if (this.chats == null) {
-            this.chats = new ArrayList<>();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
-        return this.chats;
+
+        if (!(o instanceof Account)) {
+            return false;
+        }
+
+        Account account = (Account) o;
+
+        if (!username.equals(account.username)) {
+            return false;
+        }
+        return password.equals(account.password);
     }
 }

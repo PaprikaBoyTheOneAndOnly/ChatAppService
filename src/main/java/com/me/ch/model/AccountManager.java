@@ -21,10 +21,6 @@ public class AccountManager {
         this.accounts = new HashMap<>();
     }
 
-    public void setAccounts(Map<String, Account> accounts) {
-        this.accounts = accounts;
-    }
-
     public Account isValidLogin(Account account) {
         Account foundAccount = this.accounts.get(account.getUsername());
 
@@ -41,7 +37,7 @@ public class AccountManager {
             return account;
         }
 
-            return null;
+        return null;
     }
 
     public void addMessageToAccounts(Message message) throws NullPointerException {
@@ -56,4 +52,13 @@ public class AccountManager {
     public boolean isExistingAccount(String username) {
         return this.accounts.containsKey(username);
     }
+
+    public Map<String, Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(Map<String, Account> accounts) {
+        this.accounts = accounts;
+    }
+
 }

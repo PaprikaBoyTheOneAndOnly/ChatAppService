@@ -1,8 +1,8 @@
 package com.me.ch.model;
 
 import com.me.ch.repository.AccountRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -12,8 +12,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashMap;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 public class AccountManagerTest {
@@ -23,7 +23,6 @@ public class AccountManagerTest {
 
         @Bean
         public AccountManager accountManager() {
-            System.out.println("jere");
             return new AccountManager();
         }
     }
@@ -34,16 +33,41 @@ public class AccountManagerTest {
     @MockBean
     private AccountRepository accountRepository;
 
-    @BeforeEach
+    @Before
     public void setUp() {
         HashMap<String, Account> accounts = new HashMap<>();
         accounts.put("Admin", new Account("Admin", "1234"));
+        accounts.put("User 2", new Account("User 2", "1234"));
 
         this.accountManager.setAccounts(accounts);
     }
 
     @Test
     public void isValidLogin() {
-        assertThat(this.accountManager.isValidLogin(new Account("Admin", "1234")), is("sdf"));
+        assertThat(new Account("Admin", "1234"), is(this.accountManager.isValidLogin(new Account("Admin", "1234"))));
+    }
+
+    @Test
+    public void isValidLogin_noAccountFound() {
+        assertThat(this.accountManager.isValidLogin(new Account("not an existing account", "password")), nullValue());
+    }
+
+    @Test
+    public void isValidLogin_wrongPassword() {
+        assertThat(this.accountManager.getAccounts(), hasKey("Admin"));
+        assertThat(this.accountManager.isValidLogin(new Account("Admin", "wrongPassword")), nullValue());
+    }
+
+    @Test
+    public void createAccount() {
+        Account accountToAdd = new Account("Peter", "password");
+
+        assertThat(this.accountManager.createAccount(accountToAdd), is(accountToAdd));
+    }
+
+    @Test
+    public void createAccount_usernameAlreadyExists() {
+        assertThat(this.accountManager.getAccounts(), hasEntry("Admin", new Account("Admin", "1234")));
+        assertThat(this.accountManager.createAccount(new Account("Admin", "somePassword")), nullValue());
     }
 }
