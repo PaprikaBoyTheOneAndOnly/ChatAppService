@@ -27,10 +27,6 @@ public class Account {
     }
 
     public void addMessage(Message message) {
-        if (this.chats == null) {
-            this.chats = new ArrayList<>();
-        }
-
         String chatWith = this.getUsername().equals(message.getTo()) ? message.getFrom() : message.getTo();
         boolean isExistingChat = false;
         for (Chat chat : this.chats) {
@@ -39,6 +35,7 @@ public class Account {
                 isExistingChat = true;
             }
         }
+
         if (!isExistingChat) {
             ArrayList<Message> messages = new ArrayList<>();
             messages.add(message);

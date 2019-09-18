@@ -1,64 +1,58 @@
 package com.me.ch.model;
 
 import com.me.ch.repository.AccountRepository;
+import com.me.ch.repository.DbAccount;
+import com.me.ch.repository.DbMessage;
+import com.me.ch.repository.MessageRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.ApplicationScope;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 @ApplicationScope
 @Service("accountManager")
 public class AccountManager {
     @Autowired
     private AccountRepository accountRepository;
-
-    private Map<String, Account> accounts;
+    @Autowired
+    private Logger logger;
+    @Autowired
+    private MessageRepository messageRepository;
 
     public AccountManager() {
-        this.accounts = new HashMap<>();
     }
 
     public Account isValidLogin(Account account) {
-        Account foundAccount = this.accounts.get(account.getUsername());
+        DbAccount foundAccount = accountRepository.findValidAccount(account.getUsername(), account.getPassword());
 
-        if (foundAccount != null)
-            if (!foundAccount.getPassword().equals(account.getPassword()))
-                return null;
-
-        return foundAccount;
+        return foundAccount == null ? null : new Account(foundAccount.getUsername(), foundAccount.getPassword());
     }
 
     public Account createAccount(Account account) {
-        if (this.accounts.get(account.getUsername()) == null) {
-            this.accounts.put(account.getUsername(), account);
-            return account;
+        if (!accountRepository.existsById(account.getUsername())) {
+            try {
+                accountRepository.addAccount(account.getUsername(), account.getPassword());
+                return account;
+            } catch (SQLException e) {
+                logger.error("Duplicated Account \"" + account.getUsername()+ "\" tried to be added to Database!");
+            }
         }
-
         return null;
     }
 
-    public void addMessageToAccounts(Message message) throws NullPointerException {
-        this.accounts.get(message.getTo()).addMessage(message);
-        this.accounts.get(message.getFrom()).addMessage(message);
+    public void addMessage(Message message) throws NullPointerException {
+        this.messageRepository.save(new DbMessage(message.getFrom(), message.getTo(), message.getText()));
     }
-
     public ArrayList<Chat> getChatsFromAccount(String username) {
-        return this.accounts.get(username).getChats();
+        return this.messageRepository.findAllById();
     }
 
-    public boolean isExistingAccount(String username) {
+   /* public boolean isExistingAccount(String username) {
         return this.accounts.containsKey(username);
-    }
-
-    public Map<String, Account> getAccounts() {
-        return accounts;
-    }
-
-    public void setAccounts(Map<String, Account> accounts) {
-        this.accounts = accounts;
-    }
+    }*/
 
 }

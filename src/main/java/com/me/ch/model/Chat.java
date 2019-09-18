@@ -1,21 +1,17 @@
 package com.me.ch.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 
 public class Chat {
     private String chatWith;
     private ArrayList<Message> messages;
 
-    private Logger logger = LoggerFactory.getLogger(Chat.class);
-
-    public Chat() { }
+    public Chat() {
+        this("", new ArrayList<>());
+    }
 
     public Chat(String chatWith) {
-        this.chatWith = chatWith;
-        this.messages = new ArrayList<>();
+        this(chatWith, new ArrayList<>());
     }
 
     public Chat(String chatWith, ArrayList<Message> messages) {
@@ -40,11 +36,6 @@ public class Chat {
     }
 
     public void addMessage(Message message) {
-        if(this.messages== null) {
-            this.messages = new ArrayList<>();
-        }
-
-        this.logger.info(message.toString());
         this.messages.add(message);
     }
 }

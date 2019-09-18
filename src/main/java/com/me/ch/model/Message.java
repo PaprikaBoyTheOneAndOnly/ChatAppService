@@ -6,6 +6,13 @@ public class Message {
     private String text;
 
     public Message() {
+        this("", "", "");
+    }
+
+    public Message(String from, String to, String text) {
+        this.from = from;
+        this.to = to;
+        this.text = text;
     }
 
     public String getFrom() {
