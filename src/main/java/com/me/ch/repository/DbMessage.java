@@ -11,7 +11,7 @@ import java.util.Objects;
 @Table(name = "message")
 public class DbMessage {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String fromUser;
     private String toUser;

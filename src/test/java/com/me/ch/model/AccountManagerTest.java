@@ -103,7 +103,8 @@ public class AccountManagerTest {
     @Test
     public void getChatsFromAccount() {
         ArrayList<DbMessage> dbMessages = new ArrayList<>();
-        dbMessages.add(new DbMessage("Admin", "User 2", "Hello There"));
+        DbMessage dbMessage1 = new DbMessage("Admin", "User 2", "Hello There");
+        dbMessages.add(dbMessage1);
         dbMessages.add(new DbMessage("User 2", "Admin", "General Kenobi"));
         dbMessages.add(new DbMessage("User 3", "Admin", "Hello gamer"));
         when(messageRepository.getAllMessages(anyString())).thenReturn(dbMessages);
@@ -111,6 +112,13 @@ public class AccountManagerTest {
         List<Chat> adminsChats = this.accountManager.getChatsFromAccount("Admin");
         assertThat(adminsChats, is(not(empty())));
         assertThat(adminsChats.size(), is(2));
+        assertThat(adminsChats.get(0).getChatWith(), is(dbMessage1.getToUser()));
+
+        assertThat(adminsChats.get(0).getMessages().get(0).getTo(), is(dbMessage1.getToUser()));
+        assertThat(adminsChats.get(0).getMessages().get(0).getFrom(), is(dbMessage1.getFromUser()));
+
+        assertThat(adminsChats.get(0).getMessages().get(1).getFrom(), is(dbMessage1.getToUser()));
+        assertThat(adminsChats.get(0).getMessages().get(1).getTo(), is(dbMessage1.getFromUser()));
     }
 
     @Test

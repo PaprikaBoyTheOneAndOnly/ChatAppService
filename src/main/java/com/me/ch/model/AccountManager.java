@@ -55,16 +55,15 @@ public class AccountManager {
 
         this.messageRepository.getAllMessages(username).forEach(dbMessage -> {
             String chatWith = dbMessage.getFromUser().equals(username) ? dbMessage.getToUser() : dbMessage.getFromUser();
-
             if (containsChatWith(chats, chatWith)) {
                 chats.forEach(chat -> {
                     if (chat.getChatWith().equals(chatWith)) {
-                        chat.addMessage(new Message(username, chatWith, dbMessage.getMessage()));
+                        chat.addMessage(new Message(dbMessage.getFromUser(), dbMessage.getToUser(), dbMessage.getMessage()));
                     }
                 });
             } else {
                 Chat chat = new Chat(chatWith);
-                chat.addMessage(new Message(username, chatWith, dbMessage.getMessage()));
+                chat.addMessage(new Message(dbMessage.getFromUser(), dbMessage.getToUser(), dbMessage.getMessage()));
                 chats.add(chat);
             }
         });
