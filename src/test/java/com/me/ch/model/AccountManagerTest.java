@@ -4,7 +4,6 @@ import com.me.ch.repository.AccountRepository;
 import com.me.ch.repository.DbAccount;
 import com.me.ch.repository.DbMessage;
 import com.me.ch.repository.MessageRepository;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -15,17 +14,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 public class AccountManagerTest {
@@ -101,21 +102,26 @@ public class AccountManagerTest {
 
     @Test
     public void getChatsFromAccount() {
-        assertThat(this.accountManager.getAccounts(), hasKey("Admin"));
-        assertThat(this.accountManager.getAccounts().get("Admin").getChats(), is(empty()));
-        assertThat(this.accountManager.getAccounts().get("Admin").getChats(), is(empty()));
-        this.accountManager.getAccounts().get("Admin").addMessage(new Message());
-        assertThat(this.accountManager.getAccounts().get("Admin").getChats(), is(not(empty())));
+        ArrayList<DbMessage> dbMessages = new ArrayList<>();
+        dbMessages.add(new DbMessage("Admin", "User 2", "Hello There"));
+        dbMessages.add(new DbMessage("User 2", "Admin", "General Kenobi"));
+        dbMessages.add(new DbMessage("User 3", "Admin", "Hello gamer"));
+        when(messageRepository.getAllMessages(anyString())).thenReturn(dbMessages);
 
+        List<Chat> adminsChats = this.accountManager.getChatsFromAccount("Admin");
+        assertThat(adminsChats, is(not(empty())));
+        assertThat(adminsChats.size(), is(2));
     }
 
-    /*@Test
+    @Test
     public void isExistingAccount() {
+        when(accountRepository.existsById(anyString())).thenReturn(true);
         assertThat(this.accountManager.isExistingAccount("Admin"), is(true));
     }
 
     @Test
     public void isExistingAccount_notExisting() {
+        when(accountRepository.existsById(anyString())).thenReturn(false);
         assertThat(this.accountManager.isExistingAccount("Admin 2"), is(false));
-    }*/
+    }
 }
