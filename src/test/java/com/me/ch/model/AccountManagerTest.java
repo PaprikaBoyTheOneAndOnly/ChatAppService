@@ -67,7 +67,7 @@ public class AccountManagerTest {
         assertThat(this.accountManager.isValidLogin(new Account("Admin", "wrongPassword")), nullValue());
     }
 
-    @Test()
+    @Test
     public void createAccount() throws SQLException {
         when(accountRepository.existsById(anyString())).thenReturn(false);
         Account accountToAdd = new Account("Peter", "password");
