@@ -10,12 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HealthCheckService {
 
-    @Autowired
-    private AccountRepository accountRepository;
-
     @GetMapping("/healthz")
     public String testRequest() {
-        System.out.println(accountRepository.existsById("Admin"));
         return "Server works fine!";
     }
 }
