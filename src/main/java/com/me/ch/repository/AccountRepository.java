@@ -10,9 +10,9 @@ import javax.transaction.Transactional;
 import java.sql.SQLException;
 
 @Repository
-public interface AccountRepository extends CrudRepository<DbAccount, String> {
+public interface AccountRepository extends CrudRepository<AccountEntity, String> {
     @Query(value = "SELECT * FROM account WHERE username = :username and password = :password", nativeQuery = true)
-    DbAccount findValidAccount(
+    AccountEntity findValidAccount(
             @Param("username") String username,
             @Param("password") String password);
 

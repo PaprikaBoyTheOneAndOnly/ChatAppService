@@ -7,15 +7,15 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "account")
-public class DbAccount {
+public class AccountEntity {
     @Id
     private String username;
     private String password;
 
-    public DbAccount() {
+    public AccountEntity() {
     }
 
-    public DbAccount(String username, String password) {
+    public AccountEntity(String username, String password) {
         this.username = username;
         this.password = password;
     }
@@ -41,10 +41,10 @@ public class DbAccount {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        DbAccount dbAccount = (DbAccount) o;
+        AccountEntity accountEntity = (AccountEntity) o;
 
-        if (!username.equals(dbAccount.username)) return false;
-        return password.equals(dbAccount.password);
+        if (!username.equals(accountEntity.username)) return false;
+        return password.equals(accountEntity.password);
     }
 
     @Override

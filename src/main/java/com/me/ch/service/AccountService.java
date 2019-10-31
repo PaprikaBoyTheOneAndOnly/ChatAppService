@@ -1,8 +1,11 @@
-package com.me.ch.model;
+package com.me.ch.service;
 
+import com.me.ch.model.Account;
+import com.me.ch.model.Chat;
+import com.me.ch.model.Message;
+import com.me.ch.repository.AccountEntity;
 import com.me.ch.repository.AccountRepository;
-import com.me.ch.repository.DbAccount;
-import com.me.ch.repository.DbMessage;
+import com.me.ch.repository.MessageEntity;
 import com.me.ch.repository.MessageRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScope
-@Service("accountManager")
-public class AccountManager {
+@Service
+public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
@@ -25,11 +28,11 @@ public class AccountManager {
     @Autowired
     private MessageRepository messageRepository;
 
-    public AccountManager() {
+    public AccountService() {
     }
 
     public Account isValidLogin(Account account) {
-        DbAccount foundAccount = accountRepository.findValidAccount(account.getUsername(), account.getPassword());
+        AccountEntity foundAccount = accountRepository.findValidAccount(account.getUsername(), account.getPassword());
 
         return foundAccount == null ? null : new Account(foundAccount.getUsername(), foundAccount.getPassword());
     }
@@ -46,24 +49,25 @@ public class AccountManager {
         return null;
     }
 
+    // TODO is this job fpr the accountManager?
     public void addMessage(Message message) throws NullPointerException {
-        this.messageRepository.save(new DbMessage(message.getFrom(), message.getTo(), message.getText()));
+        this.messageRepository.save(new MessageEntity(message.getFrom(), message.getTo(), message.getText()));
     }
 
     public ArrayList<Chat> getChatsFromAccount(String username) {
         ArrayList<Chat> chats = new ArrayList<>();
 
-        this.messageRepository.getAllMessages(username).forEach(dbMessage -> {
-            String chatWith = dbMessage.getFromUser().equals(username) ? dbMessage.getToUser() : dbMessage.getFromUser();
+        this.messageRepository.getAllMessages(username).forEach(messageEntity -> {
+            String chatWith = messageEntity.getFromUser().equals(username) ? messageEntity.getToUser() : messageEntity.getFromUser();
             if (containsChatWith(chats, chatWith)) {
                 chats.forEach(chat -> {
                     if (chat.getChatWith().equals(chatWith)) {
-                        chat.addMessage(new Message(dbMessage.getFromUser(), dbMessage.getToUser(), dbMessage.getMessage()));
+                        chat.addMessage(new Message(messageEntity.getFromUser(), messageEntity.getToUser(), messageEntity.getMessage()));
                     }
                 });
             } else {
                 Chat chat = new Chat(chatWith);
-                chat.addMessage(new Message(dbMessage.getFromUser(), dbMessage.getToUser(), dbMessage.getMessage()));
+                chat.addMessage(new Message(messageEntity.getFromUser(), messageEntity.getToUser(), messageEntity.getMessage()));
                 chats.add(chat);
             }
         });

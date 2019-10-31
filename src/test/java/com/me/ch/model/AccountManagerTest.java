@@ -1,9 +1,10 @@
 package com.me.ch.model;
 
 import com.me.ch.repository.AccountRepository;
-import com.me.ch.repository.DbAccount;
-import com.me.ch.repository.DbMessage;
+import com.me.ch.repository.AccountEntity;
+import com.me.ch.repository.MessageEntity;
 import com.me.ch.repository.MessageRepository;
+import com.me.ch.service.AccountService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -35,13 +36,13 @@ public class AccountManagerTest {
     static class EmployeeServiceImplTestContextConfiguration {
 
         @Bean
-        public AccountManager accountManager() {
-            return new AccountManager();
+        public AccountService accountManager() {
+            return new AccountService();
         }
     }
 
     @Autowired
-    private AccountManager accountManager;
+    private AccountService accountService;
 
     @MockBean
     private AccountRepository accountRepository;
@@ -52,19 +53,19 @@ public class AccountManagerTest {
 
     @Test
     public void isValidLogin() {
-        when(accountRepository.findValidAccount(anyString(), anyString())).thenReturn(new DbAccount("Admin", "1234"));
-        assertThat(this.accountManager.isValidLogin(new Account("Admin", "Admin")),
+        when(accountRepository.findValidAccount(anyString(), anyString())).thenReturn(new AccountEntity("Admin", "1234"));
+        assertThat(this.accountService.isValidLogin(new Account("Admin", "Admin")),
                 is(new Account("Admin", "1234")));
     }
 
     @Test
     public void isValidLogin_noAccountFound() {
-        assertThat(this.accountManager.isValidLogin(new Account("not an existing account", "password")), nullValue());
+        assertThat(this.accountService.isValidLogin(new Account("not an existing account", "password")), nullValue());
     }
 
     @Test
     public void isValidLogin_wrongPassword() {
-        assertThat(this.accountManager.isValidLogin(new Account("Admin", "wrongPassword")), nullValue());
+        assertThat(this.accountService.isValidLogin(new Account("Admin", "wrongPassword")), nullValue());
     }
 
     @Test
@@ -72,14 +73,14 @@ public class AccountManagerTest {
         when(accountRepository.existsById(anyString())).thenReturn(false);
         Account accountToAdd = new Account("Peter", "password");
 
-        assertThat(this.accountManager.createAccount(accountToAdd), is(accountToAdd));
+        assertThat(this.accountService.createAccount(accountToAdd), is(accountToAdd));
         verify(accountRepository, times(1)).addAccount(anyString(), anyString());
     }
 
     @Test
     public void createAccount_usernameAlreadyExists() {
         when(accountRepository.existsById(anyString())).thenReturn(true);
-        assertThat(this.accountManager.createAccount(new Account("Admin", "somePassword")), nullValue());
+        assertThat(this.accountService.createAccount(new Account("Admin", "somePassword")), nullValue());
         verify(logger, times(0)).error("Duplicated Account \"Admin\" tried to be added to Database!");
     }
 
@@ -90,26 +91,26 @@ public class AccountManagerTest {
                 .when(accountRepository)
                 .addAccount(anyString(), anyString());
 
-        assertThat(this.accountManager.createAccount(new Account("Admin", "somePassword")), nullValue());
+        assertThat(this.accountService.createAccount(new Account("Admin", "somePassword")), nullValue());
         verify(logger, times(1)).error("Duplicated Account \"Admin\" tried to be added to Database!");
     }
 
     @Test
     public void addMessage() {
-        this.accountManager.addMessage(new Message("Admin", "User", "Hello There!"));
-        verify(messageRepository, times(1)).save(new DbMessage("Admin", "User", "Hello There!"));
+        this.accountService.addMessage(new Message("Admin", "User", "Hello There!"));
+        verify(messageRepository, times(1)).save(new MessageEntity("Admin", "User", "Hello There!"));
     }
 
     @Test
     public void getChatsFromAccount() {
-        ArrayList<DbMessage> dbMessages = new ArrayList<>();
-        DbMessage dbMessage1 = new DbMessage("Admin", "User 2", "Hello There");
-        dbMessages.add(dbMessage1);
-        dbMessages.add(new DbMessage("User 2", "Admin", "General Kenobi"));
-        dbMessages.add(new DbMessage("User 3", "Admin", "Hello gamer"));
-        when(messageRepository.getAllMessages(anyString())).thenReturn(dbMessages);
+        ArrayList<MessageEntity> messageEntities = new ArrayList<>();
+        MessageEntity dbMessage1 = new MessageEntity("Admin", "User 2", "Hello There");
+        messageEntities.add(dbMessage1);
+        messageEntities.add(new MessageEntity("User 2", "Admin", "General Kenobi"));
+        messageEntities.add(new MessageEntity("User 3", "Admin", "Hello gamer"));
+        when(messageRepository.getAllMessages(anyString())).thenReturn(messageEntities);
 
-        List<Chat> adminsChats = this.accountManager.getChatsFromAccount("Admin");
+        List<Chat> adminsChats = this.accountService.getChatsFromAccount("Admin");
         assertThat(adminsChats, is(not(empty())));
         assertThat(adminsChats.size(), is(2));
         assertThat(adminsChats.get(0).getChatWith(), is(dbMessage1.getToUser()));
@@ -124,12 +125,12 @@ public class AccountManagerTest {
     @Test
     public void isExistingAccount() {
         when(accountRepository.existsById(anyString())).thenReturn(true);
-        assertThat(this.accountManager.isExistingAccount("Admin"), is(true));
+        assertThat(this.accountService.isExistingAccount("Admin"), is(true));
     }
 
     @Test
     public void isExistingAccount_notExisting() {
         when(accountRepository.existsById(anyString())).thenReturn(false);
-        assertThat(this.accountManager.isExistingAccount("Admin 2"), is(false));
+        assertThat(this.accountService.isExistingAccount("Admin 2"), is(false));
     }
 }

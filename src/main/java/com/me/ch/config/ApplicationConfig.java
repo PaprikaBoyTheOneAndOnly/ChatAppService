@@ -1,4 +1,4 @@
-package com.me.ch.app;
+package com.me.ch.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpRequest;

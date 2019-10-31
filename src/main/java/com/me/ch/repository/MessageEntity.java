@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "message")
-public class DbMessage {
+public class MessageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -17,10 +17,10 @@ public class DbMessage {
     private String toUser;
     private String message;
 
-    public DbMessage() {
+    public MessageEntity() {
     }
 
-    public DbMessage(String fromUser, String toUser, String message) {
+    public MessageEntity(String fromUser, String toUser, String message) {
         this.fromUser = fromUser;
         this.toUser = toUser;
         this.message = message;
@@ -61,14 +61,14 @@ public class DbMessage {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof DbMessage)) return false;
+        if (!(o instanceof MessageEntity)) return false;
 
-        DbMessage dbMessage = (DbMessage) o;
+        MessageEntity messageEntity = (MessageEntity) o;
 
-        if (id != dbMessage.id) return false;
-        if (!Objects.equals(fromUser, dbMessage.fromUser)) return false;
-        if (!Objects.equals(toUser, dbMessage.toUser)) return false;
-        return Objects.equals(message, dbMessage.message);
+        if (id != messageEntity.id) return false;
+        if (!Objects.equals(fromUser, messageEntity.fromUser)) return false;
+        if (!Objects.equals(toUser, messageEntity.toUser)) return false;
+        return Objects.equals(message, messageEntity.message);
     }
 
     @Override
