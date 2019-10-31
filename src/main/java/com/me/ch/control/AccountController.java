@@ -3,7 +3,6 @@ package com.me.ch.control;
 import com.me.ch.exception.AccountNotFoundException;
 import com.me.ch.model.Account;
 import com.me.ch.service.AccountService;
-import com.me.ch.model.Chat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
 
 @CrossOrigin
 @RestController
@@ -41,11 +38,6 @@ public class AccountController {
             return foundAccount;
         else
             throw new AccountNotFoundException("Account already exists");
-    }
-
-    @GetMapping("/loadChats")
-    public ArrayList<Chat> loadChats(@RequestParam("username") String username) {
-        return this.accountService.getChatsFromAccount(username);
     }
 
     @GetMapping(value = "/isExistingAccount")
