@@ -6,18 +6,18 @@ import com.me.ch.repository.MessageEntity;
 import com.me.ch.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.ApplicationScope;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ApplicationScope
 @Service
 public class MessageService {
 
     @Autowired
     private MessageRepository messageRepository;
 
-
-    // TODO is this job fpr the accountManager?
     public void addMessage(Message message) throws NullPointerException {
         this.messageRepository.save(new MessageEntity(message.getFrom(), message.getTo(), message.getText()));
     }

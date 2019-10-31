@@ -46,8 +46,7 @@ public class AccountManagerTest {
 
     @MockBean
     private AccountRepository accountRepository;
-    @MockBean
-    private MessageRepository messageRepository;
+
     @MockBean
     private Logger logger;
 
@@ -93,33 +92,6 @@ public class AccountManagerTest {
 
         assertThat(this.accountService.createAccount(new Account("Admin", "somePassword")), nullValue());
         verify(logger, times(1)).error("Duplicated Account \"Admin\" tried to be added to Database!");
-    }
-
-    @Test
-    public void addMessage() {
-        this.accountService.addMessage(new Message("Admin", "User", "Hello There!"));
-        verify(messageRepository, times(1)).save(new MessageEntity("Admin", "User", "Hello There!"));
-    }
-
-    @Test
-    public void getChatsFromAccount() {
-        ArrayList<MessageEntity> messageEntities = new ArrayList<>();
-        MessageEntity dbMessage1 = new MessageEntity("Admin", "User 2", "Hello There");
-        messageEntities.add(dbMessage1);
-        messageEntities.add(new MessageEntity("User 2", "Admin", "General Kenobi"));
-        messageEntities.add(new MessageEntity("User 3", "Admin", "Hello gamer"));
-        when(messageRepository.getAllMessages(anyString())).thenReturn(messageEntities);
-
-        List<Chat> adminsChats = this.accountService.getChatsFromAccount("Admin");
-        assertThat(adminsChats, is(not(empty())));
-        assertThat(adminsChats.size(), is(2));
-        assertThat(adminsChats.get(0).getChatWith(), is(dbMessage1.getToUser()));
-
-        assertThat(adminsChats.get(0).getMessages().get(0).getTo(), is(dbMessage1.getToUser()));
-        assertThat(adminsChats.get(0).getMessages().get(0).getFrom(), is(dbMessage1.getFromUser()));
-
-        assertThat(adminsChats.get(0).getMessages().get(1).getFrom(), is(dbMessage1.getToUser()));
-        assertThat(adminsChats.get(0).getMessages().get(1).getTo(), is(dbMessage1.getFromUser()));
     }
 
     @Test

@@ -1,17 +1,19 @@
 package com.me.ch.service;
 
+import com.me.ch.config.StorageProperties;
 import com.me.ch.exception.FileNotFoundException;
 import com.me.ch.exception.StorageException;
-import com.me.ch.config.StorageProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.annotation.ApplicationScope;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -19,10 +21,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.stream.Stream;
 
+/**
+ * Documentation:
+ * https://attacomsian.com/blog/uploading-files-spring-boot
+ */
+@ApplicationScope
 @Service
-public class FileSystemStorageService implements StorageService {
+public class FileSystemStorageService{
 
     private final Path rootLocation;
 
@@ -31,7 +37,6 @@ public class FileSystemStorageService implements StorageService {
         this.rootLocation = Paths.get(properties.getLocation());
     }
 
-    @Override
     @PostConstruct
     public void init() {
         try {
@@ -41,15 +46,13 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
-    @Override
-    public String store(MultipartFile file) {
+    public String store(MultipartFile file) throws StorageException{
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file " + filename);
             }
             if (filename.contains("..")) {
-                // This is a security check
                 throw new StorageException(
                         "Cannot store file with relative path outside current directory "
                                 + filename);
@@ -65,13 +68,11 @@ public class FileSystemStorageService implements StorageService {
         return filename;
     }
 
-    @Override
     public Path load(String filename) {
         return rootLocation.resolve(filename);
     }
 
-    @Override
-    public Resource loadAsResource(String filename) {
+    public Resource loadAsResource(String filename) throws FileNotFoundException {
         try {
             Path file = load(filename);
             Resource resource = new UrlResource(file.toUri());
@@ -83,5 +84,9 @@ public class FileSystemStorageService implements StorageService {
         } catch (MalformedURLException e) {
             throw new FileNotFoundException("Could not read file: " + filename, e);
         }
+    }
+
+    public void deleteAll() {
+        FileSystemUtils.deleteRecursively(rootLocation.toFile());
     }
 }
