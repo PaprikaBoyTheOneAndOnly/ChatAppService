@@ -39,7 +39,7 @@ public class FileController {
             return ResponseEntity.ok().build();
         } catch (StorageException e) {
             logger.error("Failed to upload File!", e);
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("e.getMessage()");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
 
