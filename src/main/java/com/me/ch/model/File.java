@@ -3,23 +3,33 @@ package com.me.ch.model;
 import org.springframework.web.multipart.MultipartFile;
 
 public class File extends Addressable {
-    private MultipartFile multipartFile;
+    private String filename;
+    private String originalFilename;
 
     public File() {
-        this("", "", null);
+        this("", "", "", "");
     }
 
-    public File(String from, String to, MultipartFile multipartFile) {
+    public File(String from, String to, String filename, String originalFilename) {
         super(from, to);
-        this.multipartFile = multipartFile;
+        this.filename = filename;
+        this.originalFilename =  originalFilename;
     }
 
-    public MultipartFile getMultipartFile() {
-        return multipartFile;
+    public String getFilename() {
+        return filename;
     }
 
-    public void setMultipartFile(MultipartFile multipartFile) {
-        this.multipartFile = multipartFile;
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public String getOriginalFilename() {
+        return originalFilename;
+    }
+
+    public void setOriginalFilename(String originalFilename) {
+        this.originalFilename = originalFilename;
     }
 
     @Override
@@ -30,23 +40,15 @@ public class File extends Addressable {
 
         File file = (File) o;
 
-        return multipartFile != null ? multipartFile.equals(file.multipartFile) : file.multipartFile == null;
+        if (!filename.equals(file.filename)) return false;
+        return originalFilename.equals(file.originalFilename);
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (multipartFile != null ? multipartFile.hashCode() : 0);
+        result = 31 * result + filename.hashCode();
+        result = 31 * result + originalFilename.hashCode();
         return result;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("File{");
-        sb.append("multipartFile=").append(multipartFile);
-        sb.append(", from='").append(from).append('\'');
-        sb.append(", to='").append(to).append('\'');
-        sb.append('}');
-        return sb.toString();
     }
 }
