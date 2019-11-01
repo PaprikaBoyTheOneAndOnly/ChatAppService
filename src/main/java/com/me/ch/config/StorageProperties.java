@@ -4,6 +4,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "storage")
 public class StorageProperties {
+    public StorageProperties(String location) {
+        this.location = location;
+    }
+
+    public StorageProperties() {
+    }
 
     private String location;
 

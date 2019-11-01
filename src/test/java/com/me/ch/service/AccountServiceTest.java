@@ -1,5 +1,7 @@
-package com.me.ch.model;
+package com.me.ch.service;
 
+import com.me.ch.configuration.MyTestConfiguration;
+import com.me.ch.model.Account;
 import com.me.ch.repository.AccountRepository;
 import com.me.ch.repository.AccountEntity;
 import com.me.ch.repository.MessageEntity;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.SQLException;
@@ -29,18 +32,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@Import(MyTestConfiguration.class)
 @RunWith(SpringRunner.class)
-public class AccountManagerTest {
-
-    @TestConfiguration
-    static class EmployeeServiceImplTestContextConfiguration {
-
-        @Bean
-        public AccountService accountManager() {
-            return new AccountService();
-        }
-    }
-
+public class AccountServiceTest {
     @Autowired
     private AccountService accountService;
 
