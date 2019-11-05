@@ -1,5 +1,6 @@
 package com.me.ch.control;
 
+import com.me.ch.exception.FileNotFoundException;
 import com.me.ch.exception.StorageException;
 import com.me.ch.model.File;
 import com.me.ch.service.FileSystemStorageService;
@@ -10,10 +11,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import org.springframework.core.io.Resource;
 
 @CrossOrigin
 @RestController
@@ -43,18 +47,20 @@ public class FileController {
         }
     }
 
-   /* @GetMapping("/downloadFile")
-    public ResponseEntity<Resource> downloadFile(@RequestParam("filename") String filename) {
+    @GetMapping("/downloadFile")
+    public ResponseEntity downloadFile(@RequestParam("filename") String filename) {
+        System.out.println("here");
+        System.out.println(filename);
         try {
             Resource resource = fileSystemStorageService.loadAsResource(filename);
             return ResponseEntity
                     .ok()
                     .body(resource);
         } catch (FileNotFoundException e) {
-            logger.debug("Could not find file " + filename + "!");
+            System.out.println("Could not find file " + filename + "!");
             return ResponseEntity
-                    .notFound()
-                    .build();
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Could not find file " + filename + "!");
         }
-    }*/
+    }
 }

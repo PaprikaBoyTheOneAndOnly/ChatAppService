@@ -3,7 +3,6 @@ package com.me.ch.service;
 import com.me.ch.config.StorageProperties;
 import com.me.ch.exception.FileNotFoundException;
 import com.me.ch.exception.StorageException;
-import com.me.ch.model.File;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -21,7 +20,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
 
 /**
  * Documentation:

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Chat {
     private String chatWith;
-    private ArrayList<Message> messages;
+    private ArrayList<Message> addressableList;
 
     public Chat() {
         this("", new ArrayList<>());
@@ -16,7 +16,7 @@ public class Chat {
 
     public Chat(String chatWith, ArrayList<Message> messages) {
         this.chatWith = chatWith;
-        this.messages = messages;
+        this.addressableList = messages;
     }
 
     public String getChatWith() {
@@ -27,15 +27,15 @@ public class Chat {
         this.chatWith = chatWith;
     }
 
-    public ArrayList<Message> getMessages() {
-        return messages;
+    public ArrayList<Message> getAddressableList() {
+        return addressableList;
     }
 
-    public void setMessages(ArrayList<Message> messages) {
-        this.messages = messages;
+    public void setAddressableList(ArrayList<Message> addressableList) {
+        this.addressableList = addressableList;
     }
 
     public void addMessage(Message message) {
-        this.messages.add(message);
+        this.addressableList.add(message);
     }
 }
