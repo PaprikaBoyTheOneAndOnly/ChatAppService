@@ -3,9 +3,11 @@ package com.me.ch.service;
 import com.me.ch.config.StorageProperties;
 import com.me.ch.exception.FileNotFoundException;
 import com.me.ch.exception.StorageException;
+import com.me.ch.model.MediaTypeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
@@ -13,6 +15,7 @@ import org.springframework.web.context.annotation.ApplicationScope;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -31,6 +34,8 @@ public class FileSystemStorageService {
 
     private final Path rootLocation;
 
+    @Autowired
+    private ServletContext servletContext;
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
         this.rootLocation = Paths.get(properties.getLocation());
@@ -59,6 +64,7 @@ public class FileSystemStorageService {
             try (InputStream inputStream = multipartFile.getInputStream()) {
                 Files.copy(inputStream, this.rootLocation.resolve(filename),
                         StandardCopyOption.REPLACE_EXISTING);
+                MediaType mediaType = MediaTypeUtils.getMediaTypeForFileName(this.servletContext, filename);
             }
         } catch (IOException e) {
             throw new StorageException("Failed to store file " + filename, e);
