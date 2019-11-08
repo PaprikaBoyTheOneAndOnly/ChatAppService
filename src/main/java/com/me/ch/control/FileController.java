@@ -8,7 +8,7 @@ import com.me.ch.service.FileSystemStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import org.springframework.core.io.Resource;
 
 import javax.servlet.ServletContext;
 
@@ -43,8 +41,8 @@ public class FileController {
                                      @RequestParam("from") String from,
                                      @RequestParam("to") String to) {
         try {
-            String filename = fileSystemStorageService.store(file, from, to);
-            File fileToSend = new File(from, to, filename, file.getOriginalFilename(), mediaType);
+            File fileToSend = fileSystemStorageService.store(file, from, to);
+
             template.convertAndSendToUser(from, "chat/receiveFile", fileToSend);
             template.convertAndSendToUser(to, "chat/receiveFile", fileToSend);
 
@@ -56,17 +54,17 @@ public class FileController {
     }
 
     @GetMapping("/downloadFile")
-    public ResponseEntity downloadFile(@RequestParam("filename") String filename) {
+    public ResponseEntity downloadFile(@RequestParam("filename") String filename,
+                                       @RequestParam("originalFilename") String originalFilename) {
         try {
             Resource resource = fileSystemStorageService.loadAsResource(filename);
             MediaType mediaType = MediaTypeUtils.getMediaTypeForFileName(this.servletContext, resource.getFilename());
-            System.out.println(resource.getFilename());
-            System.out.println(mediaType);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("filename", originalFilename);
 
             return ResponseEntity
                     .ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION,
-                            "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .headers(headers)
                     .contentType(mediaType)
                     .body(resource);
         } catch (FileNotFoundException e) {

@@ -4,11 +4,25 @@ CREATE TABLE `account`(
     PRIMARY KEY (`username`)
 );
 
+CREATE TABLE `file`(
+     `id` BIGINT NOT NULL AUTO_INCREMENT UNIQUE,
+     `mediaType` VARCHAR(20) NOT NULL,
+     `filename` VARCHAR(50) NOT NULL,
+     `originalFilename` VARCHAR(50) NOT NULL,
+     `sent_time` TIMESTAMP NOT NULL,
+     `from_user` VARCHAR(20) NOT NULL,
+     `to_user` VARCHAR(20) NOT NULL,
+     PRIMARY KEY (`id`),
+     FOREIGN KEY (`from_user`) REFERENCES account(`username`) ON DELETE CASCADE,
+     FOREIGN KEY (`to_user`) REFERENCES account(`username`) ON DELETE CASCADE
+);
+
 CREATE TABLE `message` (
-    `id` BIGINT not null auto_increment,
+    `id` BIGINT NOT NULL AUTO_INCREMENT UNIQUE,
+    `message` TEXT(65535) DEFAULT '',
+    `sent_time` TIMESTAMP NOT NULL,
     `from_user` VARCHAR(20) NOT NULL,
     `to_user` VARCHAR(20) NOT NULL,
-    `message` TEXT(65535) DEFAULT '',
     PRIMARY KEY (`id`),
     FOREIGN KEY (`from_user`) REFERENCES account(`username`) ON DELETE CASCADE,
     FOREIGN KEY (`to_user`) REFERENCES account(`username`) ON DELETE CASCADE

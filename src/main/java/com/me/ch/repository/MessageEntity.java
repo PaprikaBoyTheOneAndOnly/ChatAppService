@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Objects;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "message")
@@ -16,14 +16,24 @@ public class MessageEntity {
     private String fromUser;
     private String toUser;
     private String message;
+    private LocalDateTime sent_time;
 
     public MessageEntity() {
     }
 
-    public MessageEntity(String fromUser, String toUser, String message) {
+    public MessageEntity(String fromUser, String toUser, String message, LocalDateTime sent_time) {
         this.fromUser = fromUser;
         this.toUser = toUser;
         this.message = message;
+        this.sent_time = sent_time;
+    }
+
+    public LocalDateTime getSent_time() {
+        return sent_time;
+    }
+
+    public void setSent_time(LocalDateTime sent_time) {
+        this.sent_time = sent_time;
     }
 
     public int getId() {
@@ -56,39 +66,5 @@ public class MessageEntity {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof MessageEntity)) return false;
-
-        MessageEntity messageEntity = (MessageEntity) o;
-
-        if (id != messageEntity.id) return false;
-        if (!Objects.equals(fromUser, messageEntity.fromUser)) return false;
-        if (!Objects.equals(toUser, messageEntity.toUser)) return false;
-        return Objects.equals(message, messageEntity.message);
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 79 * hash + Objects.hashCode(this.id);
-        hash = 79 * hash + Objects.hashCode(this.fromUser);
-        hash = 79 * hash + Objects.hashCode(this.toUser);
-        hash = 79 * hash + Objects.hashCode(this.message);
-        return hash;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("DbMessage{ ");
-        sb.append("id=").append(id);
-        sb.append(", from='").append(fromUser).append('\'');
-        sb.append(", to='").append(toUser).append('\'');
-        sb.append(", message='").append(message).append('\'');
-        sb.append('}');
-        return sb.toString();
     }
 }

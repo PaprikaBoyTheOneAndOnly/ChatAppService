@@ -3,7 +3,10 @@ package com.me.ch.service;
 import com.me.ch.config.StorageProperties;
 import com.me.ch.exception.FileNotFoundException;
 import com.me.ch.exception.StorageException;
+import com.me.ch.model.File;
 import com.me.ch.model.MediaTypeUtils;
+import com.me.ch.repository.FileEntity;
+import com.me.ch.repository.FileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -40,6 +43,8 @@ public class FileSystemStorageService {
     public FileSystemStorageService(StorageProperties properties) {
         this.rootLocation = Paths.get(properties.getLocation());
     }
+    @Autowired
+    private FileRepository fileRepository;
 
     @PostConstruct
     public void init() {
@@ -50,8 +55,9 @@ public class FileSystemStorageService {
         }
     }
 
-    public String store(MultipartFile multipartFile, String from, String to) throws StorageException {
+    public File store(MultipartFile multipartFile, String from, String to) throws StorageException {
         String filename = this.renameFile(multipartFile, from, to);
+        File file = new File(from, to, filename, multipartFile.getOriginalFilename());
         try {
             if (multipartFile.isEmpty()) {
                 throw new StorageException("Failed to store empty file " + filename);
@@ -65,12 +71,21 @@ public class FileSystemStorageService {
                 Files.copy(inputStream, this.rootLocation.resolve(filename),
                         StandardCopyOption.REPLACE_EXISTING);
                 MediaType mediaType = MediaTypeUtils.getMediaTypeForFileName(this.servletContext, filename);
+                file.setMediaType(mediaType.toString());
+                fileRepository.save(new FileEntity(
+                        file.getFrom(),
+                        file.getTo(),
+                        file.getFilename(),
+                        file.getOriginalFilename(),
+                        file.getMediaType(),
+                        file.getTimeSent()
+                ));
             }
         } catch (IOException e) {
             throw new StorageException("Failed to store file " + filename, e);
         }
 
-        return filename;
+        return file;
     }
 
     public Path load(String filename) {

@@ -1,19 +1,31 @@
 package com.me.ch.model;
 
-import org.springframework.web.multipart.MultipartFile;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class File extends Addressable {
     private String filename;
     private String originalFilename;
+    private String mediaType;
 
     public File() {
-        this("", "", "", "");
+        this("", "", "", "", "", LocalDateTime.now());
     }
 
+
     public File(String from, String to, String filename, String originalFilename) {
-        super(from, to);
+        this(from, to,filename,originalFilename,"");
+    }
+
+    public File(String from, String to, String filename, String originalFilename, String mediaType) {
+        this(from, to,filename,originalFilename,mediaType,LocalDateTime.now());
+    }
+
+    public File(String from, String to, String filename, String originalFilename, String mediaType, LocalDateTime timeSent) {
+        super(from, to, timeSent);
         this.filename = filename;
-        this.originalFilename =  originalFilename;
+        this.originalFilename = originalFilename;
+        this.mediaType = mediaType;
     }
 
     public String getFilename() {
@@ -32,6 +44,14 @@ public class File extends Addressable {
         this.originalFilename = originalFilename;
     }
 
+    public String getMediaType() {
+        return mediaType;
+    }
+
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -40,15 +60,29 @@ public class File extends Addressable {
 
         File file = (File) o;
 
-        if (!filename.equals(file.filename)) return false;
-        return originalFilename.equals(file.originalFilename);
+        if (!Objects.equals(filename, file.filename)) return false;
+        if (!Objects.equals(originalFilename, file.originalFilename))
+            return false;
+        return Objects.equals(mediaType, file.mediaType);
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + filename.hashCode();
-        result = 31 * result + originalFilename.hashCode();
+        result = 31 * result + (filename != null ? filename.hashCode() : 0);
+        result = 31 * result + (originalFilename != null ? originalFilename.hashCode() : 0);
+        result = 31 * result + (mediaType != null ? mediaType.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "File{" + "filename='" + filename + '\'' +
+                ", originalFilename='" + originalFilename + '\'' +
+                ", mediaType='" + mediaType + '\'' +
+                ", from='" + from + '\'' +
+                ", to='" + to + '\'' +
+                ", timeSent=" + timeSent +
+                '}';
     }
 }
