@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -68,10 +69,16 @@ public class FileController {
                     .contentType(mediaType)
                     .body(resource);
         } catch (FileNotFoundException e) {
-            logger.error("Could not find file " + filename + "!", e);
+            logger.error("Could not find file " + filename + "!");
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body("Could not find file " + filename + "!");
+                    .body("Could not find file!");
         }
+    }
+
+    @DeleteMapping("/deleteFile")
+    public ResponseEntity deleteFile(@RequestParam("filename") String filename) {
+        this.fileSystemStorageService.deleteFile(filename);
+        return ResponseEntity.ok().build();
     }
 }

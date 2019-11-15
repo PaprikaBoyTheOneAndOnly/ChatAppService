@@ -6,9 +6,9 @@ CREATE TABLE `account`(
 
 CREATE TABLE `file`(
      `id` BIGINT NOT NULL AUTO_INCREMENT UNIQUE,
-     `mediaType` VARCHAR(20) NOT NULL,
+     `media_type` VARCHAR(20) NOT NULL,
      `filename` VARCHAR(50) NOT NULL,
-     `originalFilename` VARCHAR(50) NOT NULL,
+     `original_filename` VARCHAR(50) NOT NULL,
      `sent_time` TIMESTAMP NOT NULL,
      `from_user` VARCHAR(20) NOT NULL,
      `to_user` VARCHAR(20) NOT NULL,

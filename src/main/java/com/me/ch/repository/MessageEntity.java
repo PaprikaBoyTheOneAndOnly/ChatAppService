@@ -13,17 +13,17 @@ public class MessageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String fromUser;
-    private String toUser;
+    private String from_user;
+    private String to_user;
     private String message;
     private LocalDateTime sent_time;
 
     public MessageEntity() {
     }
 
-    public MessageEntity(String fromUser, String toUser, String message, LocalDateTime sent_time) {
-        this.fromUser = fromUser;
-        this.toUser = toUser;
+    public MessageEntity(String from_user, String to_user, String message, LocalDateTime sent_time) {
+        this.from_user = from_user;
+        this.to_user = to_user;
         this.message = message;
         this.sent_time = sent_time;
     }
@@ -44,20 +44,20 @@ public class MessageEntity {
         this.id = id;
     }
 
-    public String getFromUser() {
-        return fromUser;
+    public String getFrom_user() {
+        return from_user;
     }
 
-    public void setFromUser(String fromUser) {
-        this.fromUser = fromUser;
+    public void setFrom_user(String from_user) {
+        this.from_user = from_user;
     }
 
-    public String getToUser() {
-        return toUser;
+    public String getTo_user() {
+        return to_user;
     }
 
-    public void setToUser(String toUser) {
-        this.toUser = toUser;
+    public void setTo_user(String to_user) {
+        this.to_user = to_user;
     }
 
     public String getMessage() {

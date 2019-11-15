@@ -3,22 +3,16 @@ package com.me.ch.service;
 import com.me.ch.model.Addressable;
 import com.me.ch.model.Chat;
 import com.me.ch.model.File;
-import com.me.ch.model.MediaTypeUtils;
 import com.me.ch.model.Message;
 import com.me.ch.repository.FileRepository;
 import com.me.ch.repository.MessageEntity;
 import com.me.ch.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.ApplicationScope;
 
 import javax.servlet.ServletContext;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -30,8 +24,6 @@ public class MessageService {
     private MessageRepository messageRepository;
     @Autowired
     private FileRepository fileRepository;
-    @Autowired
-    private ServletContext servletContext;
 
     public void addMessage(Message message) throws NullPointerException {
         this.messageRepository.save(new MessageEntity(
@@ -45,22 +37,21 @@ public class MessageService {
         ArrayList<Chat> chats = new ArrayList<>();
 
         List<Addressable> addressableList = new ArrayList<>();
-        System.out.println(messageRepository.getAllMessages(username));
+
         this.messageRepository.getAllMessages(username).forEach(messageEntity ->
             addressableList.add(new Message(
-                    messageEntity.getFromUser(),
-                    messageEntity.getToUser(),
+                    messageEntity.getFrom_user(),
+                    messageEntity.getTo_user(),
                     messageEntity.getMessage(),
                     messageEntity.getSent_time())));
 
-        System.out.println(fileRepository.getAllFiles(username));
         this.fileRepository.getAllFiles(username).forEach(fileEntity -> {
             addressableList.add(new File(
                     fileEntity.getFrom_user(),
                     fileEntity.getTo_user(),
                     fileEntity.getFilename(),
-                    fileEntity.getOriginalFilename(),
-                    fileEntity.getMediaType(),
+                    fileEntity.getOriginal_filename(),
+                    fileEntity.getMedia_type(),
                     fileEntity.getSent_time()));
         });
         addressableList.sort(Comparator.comparing(Addressable::getTimeSent));

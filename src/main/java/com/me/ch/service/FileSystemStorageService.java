@@ -72,6 +72,7 @@ public class FileSystemStorageService {
                         StandardCopyOption.REPLACE_EXISTING);
                 MediaType mediaType = MediaTypeUtils.getMediaTypeForFileName(this.servletContext, filename);
                 file.setMediaType(mediaType.toString());
+
                 fileRepository.save(new FileEntity(
                         file.getFrom(),
                         file.getTo(),
@@ -87,6 +88,7 @@ public class FileSystemStorageService {
 
         return file;
     }
+
 
     public Path load(String filename) {
         return rootLocation.resolve(filename);
@@ -108,6 +110,10 @@ public class FileSystemStorageService {
 
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
+    }
+
+    public void deleteFile(String filename) {
+        FileSystemUtils.deleteRecursively(rootLocation.resolve(filename).toFile());
     }
 
     private String renameFile(MultipartFile file, String form, String to) {

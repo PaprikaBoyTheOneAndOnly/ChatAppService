@@ -13,17 +13,21 @@ public class FileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String mediaType;
+    private String media_type;
     private String filename;
-    private String originalFilename;
+    private String original_filename;
     private LocalDateTime sent_time;
     private String from_user;
     private String to_user;
 
-    public FileEntity(String from_user, String to_user, String filename, String originalFilename, String mediaType, LocalDateTime sent_time) {
-        this.mediaType = mediaType;
+    public FileEntity() {
+        this("", "","", "" ,"", LocalDateTime.now());
+    }
+
+    public FileEntity(String from_user, String to_user, String filename, String original_filename, String media_type, LocalDateTime sent_time) {
+        this.media_type = media_type;
         this.filename = filename;
-        this.originalFilename = originalFilename;
+        this.original_filename = original_filename;
         this.sent_time = sent_time;
         this.from_user = from_user;
         this.to_user = to_user;
@@ -37,12 +41,12 @@ public class FileEntity {
         this.id = id;
     }
 
-    public String getMediaType() {
-        return mediaType;
+    public String getMedia_type() {
+        return media_type;
     }
 
-    public void setMediaType(String mediaType) {
-        this.mediaType = mediaType;
+    public void setMedia_type(String media_type) {
+        this.media_type = media_type;
     }
 
     public String getFilename() {
@@ -53,12 +57,12 @@ public class FileEntity {
         this.filename = filename;
     }
 
-    public String getOriginalFilename() {
-        return originalFilename;
+    public String getOriginal_filename() {
+        return original_filename;
     }
 
-    public void setOriginalFilename(String originalFilename) {
-        this.originalFilename = originalFilename;
+    public void setOriginal_filename(String original_filename) {
+        this.original_filename = original_filename;
     }
 
     public LocalDateTime getSent_time() {
